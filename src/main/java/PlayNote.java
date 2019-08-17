@@ -40,7 +40,7 @@ public class PlayNote
     // convert duration from seconds to milliseconds
     int duration = Math.round((float) args[3].getDoubleValue() * (float) 1000.0);
     /// SEA
-//    duration = 1000;
+    //    duration = 1000;
     SoundExtension.playNote(instrument, note, velocity, duration);
   }
 }
