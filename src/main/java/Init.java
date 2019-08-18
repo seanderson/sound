@@ -16,7 +16,7 @@ import org.nlogo.agent.Patch;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
-
+import org.nlogo.api.ExtensionException;
 
 /**
    Initialize world for voices, one lick.
@@ -41,6 +41,16 @@ public class Init implements Command {
 					       P.WRAP,P.WRAP,P.WRAP),
 			 P.PATCHSIZE);
 	World w = ws.world();
+	int pcoloridx = getPcolorID(w);
+	try {
+	    for (int x = 0; x < P.XMAX; x++)
+		for (int y = 0; y < P.YMAX; y++)
+		    w.getPatchAt(x,y).setPatchVariable(pcoloridx,P.DBLACK);
+	}  catch (org.nlogo.api.AgentException ex) {
+	    throw new org.nlogo.api.ExtensionException("Bad patch in Init."
+						       + ex.getMessage());
+	    
+	}
 	initDrawing(w,ec);
 	addAgents(w);
     }
@@ -72,13 +82,21 @@ public class Init implements Command {
     /**
        Add agents: one for each drummer type and one for each voice.
     */
-    private void addAgents(World w) {
+    private void addAgents(World w) throws ExtensionException {
+	P.drums = new Voice[P.NDRUMS];
 	P.voices = new Voice[P.NVOICES];
-	int x = 0;
-	int y = P.PATCHESPERVOICE / 2;
-	int size = P.PATCHESPERVOICE;
+	double x = 0;
+	double y = 0.5;
+	int size = 1;
+	// assign drums
+	for (int i = 0; i < P.NDRUMS; i++, y+=1.0) {
+	    P.drums[i] = new Voice(w,P.dlist[i],P.dcolor[i],x,y,size);
+	}
+	// assign voices
+	y += (P.PATCHESPERVOICE / 2) + 0.5;
+	size = P.PATCHESPERVOICE;
 	for (int i = 0; i < P.NVOICES; i++, y+=P.PATCHESPERVOICE) {
-	    P.voices[i] = new Voice(w,P.vcolor[i],x,y,size);
+	    P.voices[i] = new Voice(w,P.vlist[i],P.vcolor[i],x,y,size);
 	}
     }
 

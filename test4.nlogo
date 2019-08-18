@@ -22,7 +22,7 @@ to go
 
         ;;sound:play-note "TRUMPET" 60 64 1
       ;;]
-    ]
+    ;;]
   ]
 
 end
@@ -106,15 +106,15 @@ NIL
 1
 
 SLIDER
-6
-176
-98
-209
+3
+50
+95
+83
 bpm
 bpm
 0
 200
-18.0
+26.0
 1
 1
 NIL

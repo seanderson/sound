@@ -5,6 +5,7 @@ package org.nlogo.extensions.sound;
 public class P {
     static int NMEASURES = 4; // measures in one lick (pattern)
     static int MAXNOTESPERMEASURE = 16;
+    static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
     static int NVOICES = 5; // bottom "voice" is rhythm, up to 10 drums
     static int PATCHESPERVOICE = 16; // possible notes 
     static int XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
@@ -20,13 +21,24 @@ public class P {
     static char SIL = '-'; // silence
     static int BASE_VOICE_COLOR = 15; // red
     static Double[] vcolor; // voice colors
+    static Double[] dcolor; // drum colors
     static Voice[] voices;
+    static Voice[] drums;
+    // list of drums
+    static int[] dlist = {35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
+    // list of instruments
+    static int[] vlist = {0,25,41,74,92};
     
     public P() {
+	int tmp = 122; // purply colors
+	dcolor = new Double[NDRUMS];
+	for (int i = 0; i < NDRUMS; i++) {
+	    if (tmp == 129) tmp = 132;
+	    dcolor[i] = new Double( tmp++ );
+	}
 	vcolor = new Double[NVOICES];
-	vcolor[0] = new Double(RCOLOR);
 	for (int i = 0; i < NVOICES; i++) {
-	    vcolor[i] = new Double(BASE_VOICE_COLOR + 10 * i);
+	    vcolor[i] = new Double(BASE_VOICE_COLOR + 20 * i);
 	}
     }
 }

@@ -94,7 +94,9 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 	primManager.addPrimitive("paint-melody", new PaintMelody());
 	primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
 	primManager.addPrimitive("play", new Play());
+	primManager.addPrimitive("set-scale", new Scale());
 	primManager.addPrimitive("load-midi", new LoadMidi());
+	
 	// end music additions
 	primManager.addPrimitive("drums", new ListDrums());
 	primManager.addPrimitive("instruments", new ListInstruments());
