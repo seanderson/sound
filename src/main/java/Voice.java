@@ -12,6 +12,7 @@ public class Voice {
     static final int[] PENTATONIC = {0,2,6,8,10}; // semtones rel. to tonic
     //static final int[] DFLT_SCALE;
     int[] scale; 
+    boolean isMidi = true;
     
     /**
        Create a new voice (really a turtle).
@@ -68,6 +69,13 @@ public class Voice {
 		scale[i] = tonic + PENTATONIC[ (i % PENTATONIC.length) ];
 	    }
 	}
+    }
+
+    /**
+       Set wavefile for this voice.
+    */
+    public void setWaveform(String dir, String wavfile) {
+
     }
 
 }

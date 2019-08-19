@@ -45,9 +45,14 @@ public class Play implements Command {
 	    for (int i = 0; i < P.NVOICES; i++) {
 		P.voices[i].fd(1);
 		note = getNote(w,i);
-		if (note > -1)
-		    SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
+		if (note > -1) {
+		    if (P.voices[i].isMidi()) 
+			SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
+		    else
+			SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
+		}
 	    }
+		    
 	} catch (org.nlogo.api.AgentException ex) {}
     }
 
