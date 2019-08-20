@@ -3,6 +3,12 @@ package org.nlogo.extensions.sound;
 import java.net.URL;
 
 import org.nlogo.api.ExtensionManager;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 
 public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
@@ -277,13 +283,63 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 		    java.applet.Applet.newAudioClip(soundurl);
 		Thread.sleep(delay);
 		clip.play();
-	    } catch (InterruptedException e) {
+	    } /*catch (LineUnavailableException e1) {
+		org.nlogo.api.Exceptions.ignore(e1);
+		}*/catch (InterruptedException e) {
 		org.nlogo.api.Exceptions.ignore(e);
 	    }
 
 	}
     }
 
+
+
+    
+    private static class PlayWavThread extends Thread {
+	private int delay;
+	private AudioInputStream wav;
+	
+	PlayWavThread(AudioInputStream wav) {
+	    super("PlayWavThread");
+	    this.wav = wav;
+	    this.delay = 0;
+	}
+
+	public void run() {
+	    try {
+		//		java.applet.AudioClip clip =
+		//		    java.applet.Applet.newAudioClip(soundurl);
+		//Thread.sleep(delay);
+		//		clip.play();
+
+		AudioFormat format = wav.getFormat();
+		DataLine.Info info = new DataLine.Info(Clip.class, format);
+		Clip audioClip = (Clip) AudioSystem.getLine(info);
+		audioClip.open(wav);
+		audioClip.start();
+		audioClip.close();
+		//wav.close();
+		
+		} catch (LineUnavailableException e) {
+		org.nlogo.api.Exceptions.ignore(e);
+	    } catch (java.io.IOException e2) {
+		org.nlogo.api.Exceptions.ignore(e2);
+	    }
+
+	}
+    }
+
+
+
+
+
+    
+    /* Start thread to play the wav */
+    static void playWav(AudioInputStream wav,int dur) 
+	throws org.nlogo.api.ExtensionException {
+	new PlayWavThread(wav).start();
+    }
+    
 
     static void playSound(URL url)
 	throws org.nlogo.api.ExtensionException {

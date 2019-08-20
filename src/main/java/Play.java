@@ -49,7 +49,7 @@ public class Play implements Command {
 		    if (P.voices[i].isMidi()) 
 			SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
 		    else
-			SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
+			SoundExtension.playWav(P.voices[i].wavs[note],dur);
 		}
 	    }
 		    

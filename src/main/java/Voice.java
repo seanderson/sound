@@ -4,6 +4,11 @@ import org.nlogo.agent.AgentSet;
 import org.nlogo.agent.Turtle;
 import org.nlogo.agent.World;
 import org.nlogo.api.ExtensionException;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
 
 public class Voice {
     Double color; // color of voice's trail
@@ -13,12 +18,14 @@ public class Voice {
     //static final int[] DFLT_SCALE;
     int[] scale; 
     boolean isMidi = true;
+    AudioInputStream wavs[]; // wavs to play for each note
     
     /**
        Create a new voice (really a turtle).
     */
     public Voice (World w,int instr,Double color, double x, double y, int size )
 	throws ExtensionException {
+	wavs = null; // assume midi input
 	scale = new int[P.PATCHESPERVOICE];
 	int tonic = 45; // lowest and tonic midi semitone number
 	setScale(tonic,"PENTATONIC");
@@ -48,6 +55,8 @@ public class Voice {
 	}
     }
 
+    public boolean isMidi() { return this.isMidi; }
+    
     /**
        Return index of note at position i for this voice.
     */
@@ -72,9 +81,26 @@ public class Voice {
     }
 
     /**
-       Set wavefile for this voice.
+       Set all wavefiles for this voice.
+       Assumes dir/wavfile-N.wav where N=0...P.PATCHESPERVOICE
     */
     public void setWaveform(String dir, String wavfile) {
+	isMidi = false;
+	wavs = new AudioInputStream[P.PATCHESPERVOICE];
+	
+	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
+	    try {
+		File file = new File(dir + wavfile + "-" + i + ".wav");
+		wavs[i] = AudioSystem.getAudioInputStream(file);
+	    } catch (UnsupportedAudioFileException ex1) {
+		wavs[i] = null;
+	    } catch (IOException ex2) {
+		wavs[i] = null;
+	    }
+
+	}
+
+
 
     }
 
