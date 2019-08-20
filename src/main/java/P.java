@@ -6,11 +6,11 @@ public class P {
     static int NMEASURES = 4; // measures in one lick (pattern)
     static int MAXNOTESPERMEASURE = 16;
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
-    static int NVOICES = 5; // bottom "voice" is rhythm, up to 10 drums
+    static int NVOICES = 4; // bottom is rhythm (not a voice)
     static int PATCHESPERVOICE = 16; // possible notes 
     static int XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
-    static int YMAX = NVOICES * PATCHESPERVOICE;
-    static Double PATCHSIZE = new Double(4.0);
+    static int YMAX = (NVOICES + 1) * PATCHESPERVOICE;
+    static Double PATCHSIZE = new Double(5.0);
     static boolean WRAP = true;
     static int LINE_THICKNESS = 1; // for drawing over patches
     static double BLACK = 0;

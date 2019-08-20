@@ -293,7 +293,9 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
     }
 
 
-
+    /*
+      Thread for playing one audio clip. 
+    */
     
     private static class PlayWavThread extends Thread {
 	private int delay;
@@ -306,37 +308,34 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 	}
 
 	public void run() {
-	    try {
-		//		java.applet.AudioClip clip =
-		//		    java.applet.Applet.newAudioClip(soundurl);
-		//Thread.sleep(delay);
-		//		clip.play();
+	    Clip audioClip = null;
+	    if (wav == null) return;
 
+	    try {
+		wav.reset();
 		AudioFormat format = wav.getFormat();
 		DataLine.Info info = new DataLine.Info(Clip.class, format);
-		Clip audioClip = (Clip) AudioSystem.getLine(info);
+		audioClip = (Clip) AudioSystem.getLine(info);
 		audioClip.open(wav);
 		audioClip.start();
-		audioClip.close();
-		//wav.close();
+	    } catch (LineUnavailableException e) {
 		
-		} catch (LineUnavailableException e) {
 		org.nlogo.api.Exceptions.ignore(e);
 	    } catch (java.io.IOException e2) {
 		org.nlogo.api.Exceptions.ignore(e2);
+	    }
+	    finally {
+		// if (audioclip != null) audioClip.close();
 	    }
 
 	}
     }
 
-
-
-
-
     
     /* Start thread to play the wav */
-    static void playWav(AudioInputStream wav,int dur) 
+    static void playWav(AudioInputStream wav,int dur)
 	throws org.nlogo.api.ExtensionException {
+	if (wav == null) return;
 	new PlayWavThread(wav).start();
     }
     

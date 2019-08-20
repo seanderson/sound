@@ -23,7 +23,7 @@ public class Play implements Command {
 	throws ExtensionException {
 
 	int note = 60;
-	int vel = 80;
+	int vel = 100;
 	int dur = 1000 / 16; // 16th note
 	dur = 100;
 	ExtensionContext ec = (ExtensionContext) context;
@@ -35,9 +35,12 @@ public class Play implements Command {
 	    // Each drum on one patch only.
 	    for (int i = 0; i < P.NDRUMS; i++) {
 		P.drums[i].fd(1);
-		p = w.getPatchAt(P.drums[i].agent.xcor(),P.drums[i].agent.ycor());
-		if (!p.pcolor().equals(P.DBLACK))
+		p = w.getPatchAt(P.drums[i].agent.xcor(),
+				 P.drums[i].agent.ycor());
+		if (!p.pcolor().equals(P.DBLACK)) {
+		    vel = 127 * (((Double)(p.pcolor()).doubleValue() - P.RCOLOR) / 9.0);
 		    SoundExtension.playDrum(P.drums[i].instrument,vel);
+		}
 	    }
 	    // Voices occupy many patches at one xcor value.
 	    // Only one patch can have a note.
@@ -47,7 +50,7 @@ public class Play implements Command {
 		note = getNote(w,i);
 		if (note > -1) {
 		    if (P.voices[i].isMidi()) 
-			SoundExtension.playNote(P.voices[i].instrument,note,vel,dur);
+			SoundExtension.playNote(P.voices[i].instrument,P.voices[i].note(note),vel,dur);
 		    else
 			SoundExtension.playWav(P.voices[i].wavs[note],dur);
 		}
@@ -67,7 +70,7 @@ public class Play implements Command {
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    p = w.getPatchAt(x,y+i);
 	    if (!p.pcolor().equals(P.DBLACK)) {
-		return P.voices[vid].note(i);
+		return i;// P.voices[vid].note(i);
 	    }
 	}
 	return -1; // no colored patch found

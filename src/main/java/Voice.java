@@ -84,18 +84,22 @@ public class Voice {
        Set all wavefiles for this voice.
        Assumes dir/wavfile-N.wav where N=0...P.PATCHESPERVOICE
     */
-    public void setWaveform(String dir, String wavfile) {
+    public void setWaveform(String dir, String wavfile)
+	throws ExtensionException {
 	isMidi = false;
 	wavs = new AudioInputStream[P.PATCHESPERVOICE];
 	
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    try {
-		File file = new File(dir + wavfile + "-" + i + ".wav");
+		File file = new File(dir + "/" + wavfile + "-" + i + ".wav");
 		wavs[i] = AudioSystem.getAudioInputStream(file);
 	    } catch (UnsupportedAudioFileException ex1) {
 		wavs[i] = null;
+		throw new ExtensionException("Audio exception: " + ex1.getMessage());
 	    } catch (IOException ex2) {
 		wavs[i] = null;
+		throw new ExtensionException("Wav file not found: " + ex2.getMessage());
+
 	    }
 
 	}

@@ -50,12 +50,10 @@ public class PaintMelody implements Command {
 	if (ws.mouseDown()) {
 	    int x = (int)(ws.mouseXCor()); // patch coords.
 	    int y = (int)(ws.mouseYCor());
-	    int voc = y / P.PATCHESPERVOICE;
-	    if (voc > 0) {  // zero is for rhythm
+	    int voc = y / P.PATCHESPERVOICE; // voice
+	    if (voc > 0) {  // zero is for drum voices
 		p = w.getPatchAt(x,y);
-		if (!p.pcolor().equals(P.BLACK)) // unset sound
-		    p.setPatchVariable(pcoloridx,P.DBLACK);
-		else {
+		if (p.pcolor().equals(P.BLACK)) {  // only paint empty patch
 		    // clear other patches for this voice.
 		    for (int iy = voc * P.PATCHESPERVOICE; iy < (voc + 1) * P.PATCHESPERVOICE; iy++) {
 			Patch tmp = w.getPatchAt(x,iy);

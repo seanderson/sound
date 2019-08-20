@@ -5,8 +5,9 @@ to init
   sound:init
   sound:rhythm 0 4 4 "9-------6-------"
   sound:rhythm 3 4 4 "--------5-------"
-  sound:rhythm 5 4 4 "--4---4---4---4-"
-
+  sound:rhythm 6 4 4 "--4---4---4---4-"
+  sound:set-waveform 1 "wav" "lum"
+  sound:set-waveform 0 "wav" "lum"
 end
 
 to go
@@ -15,14 +16,7 @@ to go
   ;; (because 60 divided by 16 is 3.75)
   every 3.75 / bpm [
     sound:play
-    ;;ask turtles [
-      ;;setxy (1 + [xcor] of self) ([ycor] of self)
-     ;; if ([pcolor] of patch-here != black) [
 
-
-        ;;sound:play-note "TRUMPET" 60 64 1
-      ;;]
-    ;;]
   ]
 
 end
@@ -30,11 +24,11 @@ end
 GRAPHICS-WINDOW
 102
 10
-370
-343
+435
+424
 -1
 -1
-4.0
+5.0
 1
 10
 1
@@ -112,9 +106,9 @@ SLIDER
 83
 bpm
 bpm
-0
+1
 200
-26.0
+21.0
 1
 1
 NIL

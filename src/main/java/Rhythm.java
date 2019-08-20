@@ -63,13 +63,14 @@ public class Rhythm implements Command {
 	    throw new ExtensionException("patch does not own pcolor");
 	}
 	// add measures of rhythm at voice
-	for (int x = 0, pos = 0; x <= P.XMAX;
+	for (int x = 0, pos = 0; x < P.XMAX;
 	     x++, pos = (pos + 1) % P.MAXNOTESPERMEASURE) {
 	    p = w.getPatchAt(x,voice);
 	    if (pttn.charAt(pos) == P.SIL)
 		p.setPatchVariable(pcoloridx,new Double(P.BLACK));
 	    else if (Character.isDigit(pttn.charAt(pos))) {
-		p.setPatchVariable(pcoloridx,new Double(P.RCOLOR+Character.getNumericValue(pttn.charAt(pos))));
+		p.setPatchVariable(pcoloridx,
+				   new Double(P.RCOLOR+Character.getNumericValue(pttn.charAt(pos))));
 	    }
 	    else { //ignore
 		p.setPatchVariable(pcoloridx,new Double(P.BLACK));
