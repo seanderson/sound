@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
 
 public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
@@ -298,34 +299,42 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
     */
     
     private static class PlayWavThread extends Thread {
-	private int delay;
-	private AudioInputStream wav;
+	Voice voc;
+	int note;
 	
-	PlayWavThread(AudioInputStream wav) {
+	PlayWavThread(Voice voc, int note) {
 	    super("PlayWavThread");
-	    this.wav = wav;
-	    this.delay = 0;
+	    this.voc = voc;
+	    this.note = note;
+
 	}
 
+	/* Build clip from data and play it. */
 	public void run() {
-	    Clip audioClip = null;
-	    if (wav == null) return;
-
+	    Clip clip = null;
+	    
 	    try {
-		wav.reset();
-		AudioFormat format = wav.getFormat();
-		DataLine.Info info = new DataLine.Info(Clip.class, format);
-		audioClip = (Clip) AudioSystem.getLine(info);
-		audioClip.open(wav);
-		audioClip.start();
+		clip = AudioSystem.getClip();
+		clip.open(voc.format,voc.wav[note],0,voc.wav[note].length);
+		clip.setFramePosition(0);
+		clip.start();
 	    } catch (LineUnavailableException e) {
-		
+		System.out.println("line unavailable");
 		org.nlogo.api.Exceptions.ignore(e);
-	    } catch (java.io.IOException e2) {
+	    } /*catch (java.io.IOException e2) {
+		System.out.println("io " + e2.getMessage());
 		org.nlogo.api.Exceptions.ignore(e2);
-	    }
+		}*/
 	    finally {
-		// if (audioclip != null) audioClip.close();
+		try { Thread.sleep(1000); }
+		catch (InterruptedException e) {
+		    org.nlogo.api.Exceptions.ignore(e);
+		}
+		
+
+		if (clip != null) clip.close();
+		//catch (IOException e3) { org.nlogo.api.Exceptions.ignore(e3); }
+		//clip.setFramePosition(0);
 	    }
 
 	}
@@ -333,10 +342,10 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
     
     /* Start thread to play the wav */
-    static void playWav(AudioInputStream wav,int dur)
+    static void playWav(Voice voc, int note, int dur)
 	throws org.nlogo.api.ExtensionException {
-	if (wav == null) return;
-	new PlayWavThread(wav).start();
+	if (voc.wav[note] == null) return;
+	new PlayWavThread(voc,note).start();
     }
     
 

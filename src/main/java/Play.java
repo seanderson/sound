@@ -38,7 +38,7 @@ public class Play implements Command {
 		p = w.getPatchAt(P.drums[i].agent.xcor(),
 				 P.drums[i].agent.ycor());
 		if (!p.pcolor().equals(P.DBLACK)) {
-		    vel = 127 * (((Double)(p.pcolor()).doubleValue() - P.RCOLOR) / 9.0);
+		    vel = (int)(127 * (((double)p.pcolor() - P.RCOLOR) / 9.0));
 		    SoundExtension.playDrum(P.drums[i].instrument,vel);
 		}
 	    }
@@ -52,7 +52,7 @@ public class Play implements Command {
 		    if (P.voices[i].isMidi()) 
 			SoundExtension.playNote(P.voices[i].instrument,P.voices[i].note(note),vel,dur);
 		    else
-			SoundExtension.playWav(P.voices[i].wavs[note],dur);
+			SoundExtension.playWav(P.voices[i],note,dur);
 		}
 	    }
 		    

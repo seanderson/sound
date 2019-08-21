@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.AudioFormat;
 
 public class Voice {
     Double color; // color of voice's trail
@@ -18,14 +19,14 @@ public class Voice {
     //static final int[] DFLT_SCALE;
     int[] scale; 
     boolean isMidi = true;
-    AudioInputStream wavs[]; // wavs to play for each note
-    
+    byte wav[][]; // wavs to play for each note
+    AudioFormat format; // format for all audio wavs
     /**
        Create a new voice (really a turtle).
     */
     public Voice (World w,int instr,Double color, double x, double y, int size )
 	throws ExtensionException {
-	wavs = null; // assume midi input
+	wav = new byte[P.PATCHESPERVOICE][];
 	scale = new int[P.PATCHESPERVOICE];
 	int tonic = 45; // lowest and tonic midi semitone number
 	setScale(tonic,"PENTATONIC");
@@ -87,17 +88,27 @@ public class Voice {
     public void setWaveform(String dir, String wavfile)
 	throws ExtensionException {
 	isMidi = false;
-	wavs = new AudioInputStream[P.PATCHESPERVOICE];
+	wav = new byte[P.PATCHESPERVOICE][];
 	
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    try {
 		File file = new File(dir + "/" + wavfile + "-" + i + ".wav");
-		wavs[i] = AudioSystem.getAudioInputStream(file);
+
+		AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+		format = stream.getFormat();
+		int bytesavailable = stream.available();
+		if (bytesavailable > 0) {
+		    wav[i] = new byte[bytesavailable];
+		    stream.read(wav[i],0,wav[i].length);
+		}
+		else wav[i] = null;
+		stream.close();
+
 	    } catch (UnsupportedAudioFileException ex1) {
-		wavs[i] = null;
+		wav[i] = null;
 		throw new ExtensionException("Audio exception: " + ex1.getMessage());
 	    } catch (IOException ex2) {
-		wavs[i] = null;
+		wav[i] = null;
 		throw new ExtensionException("Wav file not found: " + ex2.getMessage());
 
 	    }

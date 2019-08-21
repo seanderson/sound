@@ -3,11 +3,11 @@ extensions [ sound ]
 to init
   clear-all
   sound:init
-  sound:rhythm 0 4 4 "9-------6-------"
-  sound:rhythm 3 4 4 "--------5-------"
+  sound:rhythm 0 4 4 "9-------4-------"
+  sound:rhythm 3 4 4 "--------3-------"
   sound:rhythm 6 4 4 "--4---4---4---4-"
-  sound:set-waveform 1 "wav" "lum"
-  sound:set-waveform 0 "wav" "lum"
+  sound:set-waveform 1 "wav" "uh"
+  sound:set-waveform 0 "wav" "uh"
 end
 
 to go
