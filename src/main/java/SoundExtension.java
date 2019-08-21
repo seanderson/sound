@@ -326,13 +326,15 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 		org.nlogo.api.Exceptions.ignore(e2);
 		}*/
 	    finally {
-		try { Thread.sleep(1000); }
+		try { Thread.sleep(500); }
 		catch (InterruptedException e) {
 		    org.nlogo.api.Exceptions.ignore(e);
 		}
 		
 
-		if (clip != null) clip.close();
+		if (clip != null) {
+		    clip.stop(); clip.close();
+		}
 		//catch (IOException e3) { org.nlogo.api.Exceptions.ignore(e3); }
 		//clip.setFramePosition(0);
 	    }
