@@ -102,8 +102,10 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 	primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
 	primManager.addPrimitive("play", new Play());
 	primManager.addPrimitive("set-scale", new Scale());
-	primManager.addPrimitive("set-waveform", new Waveform());
+	primManager.addPrimitive("set-voice-waveform", new Waveform());
+	primManager.addPrimitive("set-voice-instrument", new SetInstrument());
 	primManager.addPrimitive("load-midi", new LoadMidi());
+
 	
 	// end music additions
 	primManager.addPrimitive("drums", new ListDrums());
@@ -306,38 +308,40 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 	    super("PlayWavThread");
 	    this.voc = voc;
 	    this.note = note;
-
 	}
 
 	/* Build clip from data and play it. */
 	public void run() {
-	    Clip clip = null;
 	    
-	    try {
-		clip = AudioSystem.getClip();
-		clip.open(voc.format,voc.wav[note],0,voc.wav[note].length);
-		clip.setFramePosition(0);
-		clip.start();
-	    } catch (LineUnavailableException e) {
-		System.out.println("line unavailable");
-		org.nlogo.api.Exceptions.ignore(e);
-	    } /*catch (java.io.IOException e2) {
-		System.out.println("io " + e2.getMessage());
-		org.nlogo.api.Exceptions.ignore(e2);
-		}*/
-	    finally {
-		try { Thread.sleep(500); }
-		catch (InterruptedException e) {
-		    org.nlogo.api.Exceptions.ignore(e);
-		}
-		
-
-		if (clip != null) {
-		    clip.stop(); clip.close();
-		}
+	    //	    try {
+		//clip = AudioSystem.getClip();
+		//clip.open(voc.format,voc.wav[note],0,voc.wav[note].length);
+		//clip.setFramePosition(0);
+		//clip.start();
+	    //	    voc.srcline.start();
+	    //	    voc.srcline.write(voc.wav[note],0,voc.wav[note].length);
+		//voc.srcline.drain();
+		//	    } /*catch (LineUnavailableException e) {
+		//	System.out.println("line unavailable");
+		//org.nlogo.api.Exceptions.ignore(e);
+		//} *//*catch (java.io.IOException e2) {
+		//	System.out.println("io " + e2.getMessage());
+		//org.nlogo.api.Exceptions.ignore(e2);
+		//}*/
+	    //finally {
+		//long len = clip.getMicrosecondLength() / 1000; // msec
+		//try { Thread.sleep(len + 10); }
+		//catch (InterruptedException e) {
+		//    org.nlogo.api.Exceptions.ignore(e);
+		//}
+		//finally {
+		//    if (clip != null) {
+		//	clip.stop(); clip.flush(); clip.close();
+		//	    }
+		//	}
 		//catch (IOException e3) { org.nlogo.api.Exceptions.ignore(e3); }
 		//clip.setFramePosition(0);
-	    }
+		//}
 
 	}
     }
@@ -347,7 +351,25 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
     static void playWav(Voice voc, int note, int dur)
 	throws org.nlogo.api.ExtensionException {
 	if (voc.wav[note] == null) return;
-	new PlayWavThread(voc,note).start();
+	//new PlayWavThread(voc,note).start();
+
+	long pos = P.mixer.position();
+	// Set to play in next buffer, to avoid skipping
+	// first bit of wav.
+	pos += AudMixer.BUFFER_SIZE_FRAMES + 10;
+	P.mixer.mix(pos,voc.wav[note]);
+	/*	
+	long offset = 0; // offset position where mixer will copy
+	int num = 0; // number of shorts to copy
+	long len = voc.wav[note].length;
+
+	while (offset < len) {
+	    num = Math.min(len-pos,AudMixer.BUFFER_SIZE_FRAMES);
+	    P.mixer.mix(pos,voc.wav[note],offset,num);
+	    pos += AudMixer.BUFFER_SIZE_FRAMES;
+	    offset += num;
+	}
+	*/
     }
     
 
