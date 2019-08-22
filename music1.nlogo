@@ -14,10 +14,10 @@ to init
 end
 
 to go
-  ;; there are 16 patches per "beat" (four beats to a measure)
-  ;; and sixty seconds in a minute, hence the 3.75 here
-  ;; (because 60 divided by 16 is 3.75)
-  every 3.75 / bpm [
+  ;; there are 4 patches per "beat" (and four beats to a measure)
+  ;; and sixty seconds in a minute, hence the 15 here
+  ;; (because 60 divided by 4 is 15)
+  every 15.0 / bpm [
     sound:play
   ]
 
@@ -110,7 +110,7 @@ bpm
 bpm
 1
 200
-19.0
+117.0
 1
 1
 NIL

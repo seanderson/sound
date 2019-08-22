@@ -105,6 +105,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 	primManager.addPrimitive("set-voice-waveform", new Waveform());
 	primManager.addPrimitive("set-voice-instrument", new SetInstrument());
 	primManager.addPrimitive("set-voice-duration", new SetDuration());
+	primManager.addPrimitive("copy-voice", new CopyVoice());	
 	primManager.addPrimitive("load-midi", new LoadMidi());
 	primManager.addPrimitive("set-time", new SetTime());
 

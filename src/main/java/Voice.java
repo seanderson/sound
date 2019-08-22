@@ -25,7 +25,7 @@ public class Voice {
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
     int dur; // duration of note for midi
-    //SourceDataLine srcline = null; // each voice can have its own dataline
+
     /**
        Create a new voice (really a turtle).
     */
@@ -130,11 +130,6 @@ public class Voice {
 
 		AudioInputStream stream = AudioSystem.getAudioInputStream(file);
 		format = stream.getFormat();
-		/*		if (srcline == null)  { // init the SourceDataLine
-		    srcline = AudioSystem.getSourceDataLine(format);
-		    srcline.open(format,1024*1024);
-		    //srcline.start();
-		    }*/
 		if (!checkFormat(format))
 		    throw new UnsupportedAudioFileException();
 		int bytesavailable = stream.available();
@@ -161,9 +156,7 @@ public class Voice {
 	    }
 
 	}
+    } // setWaveform
 
-
-
-    }
 
 }

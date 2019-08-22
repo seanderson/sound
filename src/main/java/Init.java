@@ -68,7 +68,7 @@ public class Init implements Command {
 	int xmax = (int) (P.XMAX * P.PATCHSIZE);
 	int ymax = (int) (P.YMAX * P.PATCHSIZE);
 	// draw voice delimiters
-	for (int y = 0; y < ymax;
+	for (int y = (int) (1 * P.PATCHSIZE); y <= ymax;
 	     y += P.PATCHESPERVOICE * P.PATCHSIZE) {
 	    g.drawLine(0,y,xmax,y);	
 	}

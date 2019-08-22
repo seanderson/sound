@@ -24,50 +24,51 @@ import org.nlogo.agent.Patch;
 */
 public class PaintMelody implements Command {
     
-  // voice, take beats, base note time, string of 16 chars "9-------4-------"
-  public Syntax getSyntax() {
-      return SyntaxJ.commandSyntax( 	  );
-  }
+    // voice, take beats, base note time, string of 16 chars "9-------4-------"
+    public Syntax getSyntax() {
+	return SyntaxJ.commandSyntax( 	  );
+    }
 
-  public void perform(Argument args[], Context context)
-      throws ExtensionException {
+    public void perform(Argument args[], Context context)
+	throws ExtensionException {
 
-      int voice, nbeats, basebeat;
-      String pttn;
-      try {
-      } catch (LogoException e) {
-	  throw new ExtensionException(e.getMessage());
-      }
-
-      ExtensionContext ec = (ExtensionContext) context;
-      Workspace ws = ec.workspace();
-
-    World w = ws.world();
-    int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
-    Patch p = null;
-    try {
-
-	if (ws.mouseDown()) {
-	    int x = (int)(ws.mouseXCor()); // patch coords.
-	    int y = (int)(ws.mouseYCor());
-	    int voc = (y / P.PATCHESPERVOICE); // voice
-	    if (voc > 0) {  // zero is for drum voices
-		p = w.getPatchAt(x,y);
-		if (p.pcolor().equals(P.BLACK)) {  // only paint empty patch
-		    // clear other patches for this voice.
-		    for (int iy = voc * P.PATCHESPERVOICE; iy < (voc + 1) * P.PATCHESPERVOICE; iy++) {
-			Patch tmp = w.getPatchAt(x,iy);
-			tmp.setPatchVariable(pcoloridx,P.DBLACK);
-		    }
-		    p.setPatchVariable(pcoloridx,P.vcolor[voc-1]); // color this patch
-		}
-	    }
+	int voice, nbeats, basebeat;
+	String pttn;
+	try {
+	} catch (LogoException e) {
+	    throw new ExtensionException(e.getMessage());
 	}
 
-    } catch (org.nlogo.api.AgentException ex) {
-	throw new org.nlogo.api.ExtensionException("Bad patch in music.");
-    }
+	ExtensionContext ec = (ExtensionContext) context;
+	Workspace ws = ec.workspace();
+
+	World w = ws.world();
+	int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
+	Patch p = null;
+	try {
+
+	    if (ws.mouseDown()) {
+		int x = (int)(ws.mouseXCor()); // patch coords.
+		int y = (int)(ws.mouseYCor());
+		if (y > P.YMAX - P.PATCHESPERVOICE) return;
+		int voc = (y / P.PATCHESPERVOICE); // voice
+		if (voc > 0) {  // zero is for drum voices
+		    p = w.getPatchAt(x,y);
+		    if (p.pcolor().equals(P.BLACK)) {  // only paint empty patch
+			// clear other patches for this voice.
+			for (int iy = voc * P.PATCHESPERVOICE; iy < (voc + 1) * P.PATCHESPERVOICE; iy++) {
+			    Patch tmp = w.getPatchAt(x,iy);
+			    tmp.setPatchVariable(pcoloridx,P.DBLACK);
+			}
+			p.setPatchVariable(pcoloridx,P.vcolor[voc-1]); // color this patch
+		    }
+		}
+	    }
+
+	} catch (org.nlogo.api.AgentException ex) {
+	    throw new org.nlogo.api.ExtensionException("Bad patch in music.");
+	}
     
-  }
+    }
 }
 
