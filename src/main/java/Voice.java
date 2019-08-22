@@ -20,16 +20,18 @@ public class Voice {
     Turtle agent; // a turtle
     int instrument; // index in SoundExtension.INSTRUMENT_NAMES
     static final int[] PENTATONIC = {0,2,6,8,10}; // semtones rel. to tonic
-    int[] scale; 
+    int[] scale; // set of notes for this instrument.  Lowest is tonic.
     boolean isMidi = true;
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
+    int dur; // duration of note for midi
     //SourceDataLine srcline = null; // each voice can have its own dataline
     /**
        Create a new voice (really a turtle).
     */
     public Voice (World w,int instr,Double color, double x, double y, int size )
 	throws ExtensionException {
+	dur = 100;
 	wav = new short[P.PATCHESPERVOICE][];
 	scale = new int[P.PATCHESPERVOICE];
 	int tonic = 45; // lowest and tonic midi semitone number
@@ -70,7 +72,7 @@ public class Voice {
 	return scale[i];
     }
 
- /**
+    /**
        Return index of note at position i for this voice.
     */
     public void setScale(int tonic, String name) {
@@ -124,7 +126,7 @@ public class Voice {
 	
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    try {
-		File file = new File(dir + "/" + wavfile + "-" + i + ".wav");
+		File file = new File(dir + "/" + wavfile + "-" + scale[i] + ".wav");
 
 		AudioInputStream stream = AudioSystem.getAudioInputStream(file);
 		format = stream.getFormat();

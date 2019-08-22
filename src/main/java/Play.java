@@ -25,7 +25,6 @@ public class Play implements Command {
 	int note = 60;
 	int vel = 100;
 	int dur = 1000 / 16; // 16th note
-	dur = 100;
 	ExtensionContext ec = (ExtensionContext) context;
 	Workspace ws = ec.workspace();
 	World w = ws.world();
@@ -50,9 +49,9 @@ public class Play implements Command {
 		note = getNote(w,i);
 		if (note > -1) {
 		    if (P.voices[i].isMidi()) 
-			SoundExtension.playNote(P.voices[i].instrument,P.voices[i].note(note),vel,dur);
+			SoundExtension.playNote(P.voices[i].instrument,P.voices[i].note(note),vel,P.voices[i].dur);
 		    else
-			SoundExtension.playWav(P.voices[i],note,dur);
+			SoundExtension.playWav(P.voices[i],note,P.voices[i].dur);
 		}
 	    }
 		    

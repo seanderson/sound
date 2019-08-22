@@ -9,6 +9,8 @@ to init
   sound:set-voice-waveform 1 "wav" "uh"
   sound:set-voice-waveform 0 "wav" "uh"
   sound:set-voice-instrument 2 "ACOUSTIC GRAND PIANO"
+  sound:set-voice-instrument 3 "VIOLIN"
+  sound:set-voice-duration 3 1000
 end
 
 to go
@@ -94,16 +96,16 @@ T
 T
 OBSERVER
 NIL
-NIL
+G
 NIL
 NIL
 1
 
 SLIDER
-3
-50
-95
-83
+4
+482
+96
+515
 bpm
 bpm
 1
@@ -122,6 +124,38 @@ BUTTON
 delete
 sound:unpaint-melody
 T
+1
+T
+OBSERVER
+NIL
+D
+NIL
+NIL
+1
+
+SLIDER
+99
+586
+435
+619
+time
+time
+min-pxcor
+max-pxcor
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+BUTTON
+9
+532
+97
+565
+setTime
+sound:set-time time
+NIL
 1
 T
 OBSERVER
