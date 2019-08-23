@@ -47,21 +47,31 @@ public class Play implements Command {
 	    for (int i = 0; i < P.NVOICES; i++) {
 		P.voices[i].fd(1);
 		note = getNote(w,i);
-		if (note > -1) {
-		    if (P.voices[i].isMidi()) 
-			SoundExtension.playNote(P.voices[i].instrument,P.voices[i].note(note),vel,P.voices[i].dur);
-		    else
-			SoundExtension.playWav(P.voices[i],note,P.voices[i].dur);
-		}
+		playnote(i,note);
 	    }
 		    
 	} catch (org.nlogo.api.AgentException ex) {}
     }
 
+    public static void playnote(int vid,int note) throws ExtensionException {
+	Voice v = P.voices[vid];
+	if (note > -1) {
+	    if (v.isMidi()) 
+		SoundExtension.playNote(v.instrument,
+					v.note(note),
+					v.vel,
+					v.dur);
+	    else
+		SoundExtension.playWav(v,note,
+				       v.dur);
+	}
+    }
+
+
     /* 
        Return note for colored patch governed by this voice; -1 if none found.
      */
-    private int getNote(World w, int vid) throws AgentException {
+    public static int getNote(World w, int vid) throws AgentException {
 	Patch p = null;
 	// Find first patch in range that is not black.
 	double x = P.voices[vid].agent.xcor();
@@ -75,5 +85,5 @@ public class Play implements Command {
 	return -1; // no colored patch found
     }
 
-    
+
 } // end Play

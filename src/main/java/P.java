@@ -9,7 +9,7 @@ public class P {
     static int NMEASURES = 4; // measures in one lick (pattern)
     static int MAXNOTESPERMEASURE = 16;
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
-    static int NVOICES = 6; // bottom is rhythm (not a voice)
+    static int NVOICES = 4; // bottom is rhythm (not a voice)
     static int PATCHESPERVOICE = 16; // possible notes 
     static int XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
     static int YMAX = (NVOICES + 1) * PATCHESPERVOICE;
@@ -27,6 +27,8 @@ public class P {
     static Double[] dcolor; // drum colors
     static Voice[] voices;
     static Voice[] drums;
+    static String PENTATONIC = "PENTATONIC";
+    
     // list of drums
     static int[] dlist = {35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
     // list of instruments

@@ -25,17 +25,21 @@ public class Voice {
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
     int dur; // duration of note for midi
-
+    int vel = 100; // velocity
+    int tonic = 48;
+    String type;
     /**
        Create a new voice (really a turtle).
     */
-    public Voice (World w,int instr,Double color, double x, double y, int size )
+    public Voice (World w,int instr,Double color, double x, double y, int size,
+		  int tonic, String type )
 	throws ExtensionException {
 	dur = 100;
 	wav = new short[P.PATCHESPERVOICE][];
 	scale = new int[P.PATCHESPERVOICE];
-	int tonic = 45; // lowest and tonic midi semitone number
-	setScale(tonic,"PENTATONIC");
+	this.tonic = tonic;
+	this.type = type;
+	setScale(tonic,this.type);
 	AgentSet breed = w.turtles();
 	agent = w.createTurtle(breed,1,0); //color.intValue(),0);
 	this.instrument = instr;

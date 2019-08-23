@@ -35,7 +35,7 @@ public class Init implements Command {
 	ExtensionContext ec = (ExtensionContext) context;
 	Workspace ws = ec.workspace();
 
-	ws.setDimensions(new WorldDimensions3D(0,P.XMAX,0,
+	ws.setDimensions(new WorldDimensions3D(0,P.XMAX-1,0,
 					       P.YMAX,0,1,
 					       P.PATCHSIZE,
 					       P.WRAP,P.WRAP,P.WRAP),
@@ -64,7 +64,7 @@ public class Init implements Command {
 	java.awt.image.BufferedImage drawing = context.getDrawing();
 	Graphics2D g = drawing.createGraphics();
 	g.setColor(java.awt.Color.WHITE);
-	g.setStroke(new BasicStroke(P.LINE_THICKNESS));
+	g.setStroke(new BasicStroke(1*P.LINE_THICKNESS));
 	int xmax = (int) (P.XMAX * P.PATCHSIZE);
 	int ymax = (int) (P.YMAX * P.PATCHSIZE);
 	// draw voice delimiters
@@ -72,31 +72,47 @@ public class Init implements Command {
 	     y += P.PATCHESPERVOICE * P.PATCHSIZE) {
 	    g.drawLine(0,y,xmax,y);	
 	}
+	// Draw lines at each beat
+	g.setColor(java.awt.Color.GRAY);
+	g.setStroke(new BasicStroke(P.LINE_THICKNESS));
 	// draw measure delimiters
+	for (int x = 0; x < xmax;
+	     x += 4 * P.PATCHSIZE) {
+	    g.drawLine(x,0,x,ymax);	
+	}
+	// draw measure delimiters
+	g.setColor(java.awt.Color.WHITE);
+	g.setStroke(new BasicStroke(2*P.LINE_THICKNESS));
 	for (int x = 0; x < xmax;
 	     x += P.MAXNOTESPERMEASURE * P.PATCHSIZE) {
 	    g.drawLine(x,0,x,ymax);	
 	}
+
+	
     }
 
     /**
        Add agents: one for each drummer type and one for each voice.
     */
     private void addAgents(World w) throws ExtensionException {
+	int tonic = 36;
 	P.drums = new Voice[P.NDRUMS];
 	P.voices = new Voice[P.NVOICES];
-	double x = 0;
+	double x = -1;
 	double y = 0.0; //patch center at 0.0
 	int size = 1;
 	// assign drums
 	for (int i = 0; i < P.NDRUMS; i++, y+=1.0) {
-	    P.drums[i] = new Voice(w,P.dlist[i],P.dcolor[i],x,y,size);
+	    P.drums[i] = new Voice(w,P.dlist[i],P.dcolor[i],x,y,size,
+				   tonic,P.PENTATONIC);
 	}
 	// assign voices
 	y += (P.PATCHESPERVOICE / 2);
 	size = P.PATCHESPERVOICE;
 	for (int i = 0; i < P.NVOICES; i++, y+=P.PATCHESPERVOICE) {
-	    P.voices[i] = new Voice(w,P.vlist[i],P.vcolor[i],x,y,size);
+	    P.voices[i] = new Voice(w,P.vlist[i],P.vcolor[i],x,y,size,
+				    tonic,P.PENTATONIC);
+	    tonic += 12;
 	}
     }
 

@@ -50,17 +50,20 @@ public class PaintMelody implements Command {
 	    if (ws.mouseDown()) {
 		int x = (int)(ws.mouseXCor()); // patch coords.
 		int y = (int)(ws.mouseYCor());
-		if (y > P.YMAX - P.PATCHESPERVOICE) return;
+		if (y > P.YMAX - 1) return;
 		int voc = (y / P.PATCHESPERVOICE); // voice
 		if (voc > 0) {  // zero is for drum voices
+		    voc--; // usual zero-based voice
 		    p = w.getPatchAt(x,y);
 		    if (p.pcolor().equals(P.BLACK)) {  // only paint empty patch
 			// clear other patches for this voice.
-			for (int iy = voc * P.PATCHESPERVOICE; iy < (voc + 1) * P.PATCHESPERVOICE; iy++) {
+			for (int iy = (voc+1) * P.PATCHESPERVOICE; iy < (voc + 2) * P.PATCHESPERVOICE; iy++) {
 			    Patch tmp = w.getPatchAt(x,iy);
 			    tmp.setPatchVariable(pcoloridx,P.DBLACK);
 			}
-			p.setPatchVariable(pcoloridx,P.vcolor[voc-1]); // color this patch
+			// color this patch
+			p.setPatchVariable(pcoloridx,P.vcolor[voc]);
+			Play.playnote(voc,y % P.PATCHESPERVOICE);
 		    }
 		}
 	    }
