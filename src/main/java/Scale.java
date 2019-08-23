@@ -4,7 +4,6 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
-// SEA
 import org.nlogo.api.Color;
 import org.nlogo.nvm.Workspace;
 import org.nlogo.nvm.ExtensionContext;
@@ -17,6 +16,39 @@ import org.nlogo.agent.Patch;
    Set scale/tonic for a voice.
 */
 public class Scale implements Command {
+    
+    static class Type {
+	static int[] tones;
+	static String name;
+	static String[] names = {"PENTATONIC","PENTATONIC_MINOR",
+				 "BLUES","MAJOR_7",
+				 "WHOLE_TONE"};
+	static final int[][] SCALES = {
+	    {0,2,5,7,9},    // pentatonic
+	    {0,3,5,7,10},   // pent. minor
+	    {0,3,4,5,7,10}, // blues
+	    {0,4,7,11},     // major 7
+	    {0,2,4,6,8,10} // whole tone
+	};
+
+    }
+    public static String PENTATONIC = Type.names[0];
+    public static String PENTATONIC_MINOR = Type.names[1];
+    public static String BLUES = Type.names[2];
+    public static String MAJOR_7 = Type.names[3];
+    public static String WHOLE_TONE = Type.names[4];
+
+    public int[] getScale(String name)
+	throws ExtensionException {
+
+	for (int i = 0; i < Type.names.length; i++) {
+	    if (Type.names.equals(name)) return Type.SCALES[i];
+	}
+	throw new ExtensionException("Scale undefined: " + name);
+    }
+
+
+    
     
   // voice, take beats, base note time, string of 16 chars "9-------4-------"
   public Syntax getSyntax() {

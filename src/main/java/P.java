@@ -27,7 +27,6 @@ public class P {
     static Double[] dcolor; // drum colors
     static Voice[] voices;
     static Voice[] drums;
-    static String PENTATONIC = "PENTATONIC";
     
     // list of drums
     static int[] dlist = {35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};

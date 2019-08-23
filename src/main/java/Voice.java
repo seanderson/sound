@@ -19,7 +19,6 @@ public class Voice {
     Double color; // color of voice's trail
     Turtle agent; // a turtle
     int instrument; // index in SoundExtension.INSTRUMENT_NAMES
-    static final int[] PENTATONIC = {0,2,6,8,10}; // semtones rel. to tonic
     int[] scale; // set of notes for this instrument.  Lowest is tonic.
     boolean isMidi = true;
     short wav[][]; // wavs to play for each note

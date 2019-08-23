@@ -104,14 +104,14 @@ public class Init implements Command {
 	// assign drums
 	for (int i = 0; i < P.NDRUMS; i++, y+=1.0) {
 	    P.drums[i] = new Voice(w,P.dlist[i],P.dcolor[i],x,y,size,
-				   tonic,P.PENTATONIC);
+				   tonic,Scale.PENTATONIC);
 	}
 	// assign voices
 	y += (P.PATCHESPERVOICE / 2);
 	size = P.PATCHESPERVOICE;
 	for (int i = 0; i < P.NVOICES; i++, y+=P.PATCHESPERVOICE) {
 	    P.voices[i] = new Voice(w,P.vlist[i],P.vcolor[i],x,y,size,
-				    tonic,P.PENTATONIC);
+				    tonic,Scale.PENTATONIC);
 	    tonic += 12;
 	}
     }

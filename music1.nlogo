@@ -3,14 +3,15 @@ extensions [ sound ]
 to init
   clear-all
   sound:init
-  sound:rhythm 0 4 4 "9-------4-------"
-  sound:rhythm 3 4 4 "--------3-------"
-  sound:rhythm 6 4 4 "--4---4---4---4-"
-  sound:set-voice-waveform 1 "wav" "uh"
-  sound:set-voice-waveform 0 "wav" "uh"
-  sound:set-voice-instrument 2 "ACOUSTIC GRAND PIANO"
-  sound:set-voice-instrument 3 "VIOLIN"
-  sound:set-voice-duration 3 1000
+  sound:rhythm 0 4 4 "7-------1-------"
+  sound:rhythm 5 4 4 "--------4---4---"
+  ;;sound:rhythm 6 4 4 "--4---4---4---4-"
+  sound:set-voice-instrument 3 "FLUTE"
+
+  sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
+  sound:set-voice-instrument 0 "VIOLIN"
+  sound:set-voice-duration 0 1000
+  sound:set-voice-waveform 2 "wav" "uh"
 end
 
 to go
@@ -26,8 +27,8 @@ end
 GRAPHICS-WINDOW
 102
 10
-435
-584
+430
+424
 -1
 -1
 5.0
@@ -41,9 +42,9 @@ GRAPHICS-WINDOW
 1
 1
 0
-64
+63
 0
-112
+80
 0
 0
 1
@@ -103,14 +104,14 @@ NIL
 
 SLIDER
 4
-482
+323
 96
-515
+356
 bpm
 bpm
 1
 200
-117.0
+81.0
 1
 1
 NIL
@@ -134,10 +135,10 @@ NIL
 1
 
 SLIDER
-99
-586
-435
-619
+100
+429
+436
+462
 time
 time
 min-pxcor
@@ -149,10 +150,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-9
-532
-97
-565
+4
+428
+92
+461
 setTime
 sound:set-time time
 NIL
