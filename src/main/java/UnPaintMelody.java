@@ -51,8 +51,8 @@ public class UnPaintMelody implements Command {
 	if (ws.mouseDown()) {
 	    int x = (int)(ws.mouseXCor()); // patch coords.
 	    int y = (int)(ws.mouseYCor());
-	    int voc = y / P.PATCHESPERVOICE;
-	    if (voc > 0 && voc < P.vcolor.length) {  // zero is for rhythm
+	    int voc = (y / P.PATCHESPERVOICE) - 1;
+	    if (voc >= 0 && voc < P.vcolor.length) {  // zero is for rhythm
 		p = w.getPatchAt(x,y);
 		if (!p.pcolor().equals(P.BLACK)) { // unset sound 
 		    p.setPatchVariable(pcoloridx,P.DBLACK);

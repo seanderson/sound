@@ -38,11 +38,11 @@ public class Scale implements Command {
     public static String MAJOR_7 = Type.names[3];
     public static String WHOLE_TONE = Type.names[4];
 
-    public int[] getScale(String name)
+    public static int[] getScale(String name)
 	throws ExtensionException {
 
 	for (int i = 0; i < Type.names.length; i++) {
-	    if (Type.names.equals(name)) return Type.SCALES[i];
+	    if (Type.names[i].equals(name)) return Type.SCALES[i];
 	}
 	throw new ExtensionException("Scale undefined: " + name);
     }

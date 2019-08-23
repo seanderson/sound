@@ -4,6 +4,8 @@ package org.nlogo.extensions.sound;
 // Params for all of music
 
 public class P {
+    static int BEATSPERMINUTE = 80;
+    static int BEATSPERMEASURE = 4;
     static int SAMPLERATE = 44100; // for wavs
     static int SAMPLESIZE = 16; // 16-bit precision for wavs
     static int NMEASURES = 4; // measures in one lick (pattern)
@@ -27,7 +29,7 @@ public class P {
     static Double[] dcolor; // drum colors
     static Voice[] voices;
     static Voice[] drums;
-    
+    static int MIN_NOTE_DUR = 0; // duration, in msec, of smallest note.
     // list of drums
     static int[] dlist = {35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
     // list of instruments
@@ -35,6 +37,7 @@ public class P {
     static AudMixer mixer; // plays all wavs on single line
     
     public P() {
+	setBPM(BEATSPERMINUTE);
 	int tmp = 122; // purply colors
 	dcolor = new Double[NDRUMS];
 	mixer = new AudMixer();
@@ -48,5 +51,16 @@ public class P {
 	    vcolor[i] = new Double(BASE_VOICE_COLOR + 20 * i);
 	}
 	
+    }
+
+    /*
+      set global beats per minute.  Must also reset duration of minimum
+      note which is in msec.
+    */
+    public static void setBPM(int bpm) {
+	if (bpm > 0 && bpm < 1000) {
+	    BEATSPERMINUTE = bpm;
+	    MIN_NOTE_DUR = (int) (1000 * (60.0 / (MAXNOTESPERMEASURE / BEATSPERMEASURE)) / BEATSPERMINUTE);
+	}
     }
 }

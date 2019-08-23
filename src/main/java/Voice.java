@@ -11,7 +11,6 @@ import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
-//import javax.sound.sampled.SourceDataLine;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -19,23 +18,24 @@ public class Voice {
     Double color; // color of voice's trail
     Turtle agent; // a turtle
     int instrument; // index in SoundExtension.INSTRUMENT_NAMES
-    int[] scale; // set of notes for this instrument.  Lowest is tonic.
+    int[] notes; // set of notes for this instrument.  Lowest is tonic.
     boolean isMidi = true;
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
-    int dur; // duration of note for midi
+    int dur = 1; // duration of note (in terms of smallest note dur.)
     int vel = 100; // velocity
     int tonic = 48;
     String type;
+
     /**
-       Create a new voice (really a turtle).
+       Create a new voice corresponds to one turtle.
     */
-    public Voice (World w,int instr,Double color, double x, double y, int size,
+    public Voice (World w,int instr,Double color,
+		  double x, double y, int size,
 		  int tonic, String type )
 	throws ExtensionException {
-	dur = 100;
 	wav = new short[P.PATCHESPERVOICE][];
-	scale = new int[P.PATCHESPERVOICE];
+	notes = new int[P.PATCHESPERVOICE];
 	this.tonic = tonic;
 	this.type = type;
 	setScale(tonic,this.type);
@@ -72,20 +72,23 @@ public class Voice {
     */
     public int note(int i) {
 	if (i < 0 || i >= P.PATCHESPERVOICE) return 0;
-	return scale[i];
+	return notes[i];
     }
 
     /**
-       Return index of note at position i for this voice.
+       Set up all notes for voice, based on tonic and scale name.
     */
-    public void setScale(int tonic, String name) {
-	if ( tonic < 20 || tonic > 100) return;
-	if (name.equals("PENTATONIC") ) {
+    public void setScale(int tonic, String name)
+    throws ExtensionException {
+	if ( tonic < 20 || tonic > 108) return; // hard limits
+	if (name.equals(Scale.PENTATONIC) ) {
+	    int [] master_scale = Scale.getScale(name);
 	    for (int i = 0; i < P.PATCHESPERVOICE; i++) {
-		if (i == PENTATONIC.length) {
-		    tonic += 12; // next octave
+		// Shift scale up one octave
+		if (i % master_scale.length == 0 && i != 0) {
+		    tonic += 12;
 		}
-		scale[i] = tonic + PENTATONIC[ (i % PENTATONIC.length) ];
+		this.notes[i] = tonic + master_scale[ (i % master_scale.length) ];
 	    }
 	}
     }
@@ -129,7 +132,8 @@ public class Voice {
 	
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    try {
-		File file = new File(dir + "/" + wavfile + "-" + scale[i] + ".wav");
+		// Files names with midi number (notes[i])
+		File file = new File(dir + "/" + wavfile + "-" + notes[i] + ".wav");
 
 		AudioInputStream stream = AudioSystem.getAudioInputStream(file);
 		format = stream.getFormat();
@@ -139,17 +143,13 @@ public class Voice {
 		if (bytesavailable > 0) {
 		    byte[] tmp = new byte[bytesavailable];
 		    stream.read(tmp,0,bytesavailable);
-		    // place bytes into array of shorts
+		    // keep bytes in array of shorts
 		    wav[i] = toShort(tmp);
 		}
 		else wav[i] = null;
 		stream.close();
 
-	    }/* catch (LineUnavailableException ex0) {
-		throw new ExtensionException("Audio exception: " + ex0.getMessage());
-		}*/
-
-	    catch (UnsupportedAudioFileException ex1) {
+	    } catch (UnsupportedAudioFileException ex1) {
 		wav[i] = null;
 		throw new ExtensionException("Audio exception: " + ex1.getMessage());
 	    } catch (IOException ex2) {

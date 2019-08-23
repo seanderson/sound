@@ -4,18 +4,12 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
-// SEA
 import org.nlogo.api.Context;
-
-import org.nlogo.nvm.Workspace;
-import org.nlogo.nvm.ExtensionContext;
-import org.nlogo.api.WorldResizer;
-
-import org.nlogo.agent.World;
-import org.nlogo.agent.Patch;
 
 /**
    Set duration of all notes for this voice.
+   Duration is in integer terms of 1/MAXNOTESPERMEASURE
+   and must be >= 1 and < P.XMAX.
 */
 public class SetDuration implements Command {
     
@@ -40,9 +34,9 @@ public class SetDuration implements Command {
 
 
       if (vid < 0 || vid >= P.NVOICES)
-	  throw new ExtensionException("Bad voice ID: " + vid);
-      if (dur < 0 || dur > 1000)
-	  throw new ExtensionException("Bad note duration: " + dur);
+	  throw new ExtensionException("Bad voice ID: " + vid + " in SetDuration");
+      if (dur <= 0 || dur > P.XMAX)
+	  throw new ExtensionException("Bad note duration: " + dur + " in SetDuration");
 
       P.voices[vid].dur = dur;
 

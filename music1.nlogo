@@ -3,21 +3,27 @@ extensions [ sound ]
 to init
   clear-all
   sound:init
+  sound:set-parameter "BPM" bpm
   sound:rhythm 0 4 4 "7-------1-------"
   sound:rhythm 5 4 4 "--------4---4---"
   ;;sound:rhythm 6 4 4 "--4---4---4---4-"
-  sound:set-voice-instrument 3 "FLUTE"
 
-  sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
   sound:set-voice-instrument 0 "VIOLIN"
-  sound:set-voice-duration 0 1000
-  sound:set-voice-waveform 2 "wav" "uh"
+  sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
+  sound:set-voice-waveform 2 "wav" "meow"
+  sound:set-voice-instrument 3 "FLUTE"
+  sound:set-voice-duration 0 16
+  sound:set-voice-duration 1 8
+  sound:set-voice-duration 3 2
+
+
 end
 
 to go
   ;; there are 4 patches per "beat" (and four beats to a measure)
   ;; and sixty seconds in a minute, hence the 15 here
   ;; (because 60 divided by 4 is 15)
+  sound:set-parameter "BPM" bpm
   every 15.0 / bpm [
     sound:play
   ]
@@ -111,7 +117,7 @@ bpm
 bpm
 1
 200
-81.0
+121.0
 1
 1
 NIL
@@ -141,9 +147,9 @@ SLIDER
 462
 time
 time
-min-pxcor
+-1
 max-pxcor
-0.0
+-1.0
 1
 1
 NIL
@@ -156,6 +162,124 @@ BUTTON
 461
 setTime
 sound:set-time time
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+TEXTBOX
+445
+32
+595
+50
+Voice 3
+14
+114.0
+1
+
+TEXTBOX
+454
+371
+604
+389
+Rhythm
+14
+25.0
+1
+
+TEXTBOX
+450
+278
+600
+296
+Voice 0
+14
+114.0
+1
+
+TEXTBOX
+447
+112
+597
+130
+Voice 2
+14
+114.0
+1
+
+TEXTBOX
+449
+193
+599
+211
+Voice 1
+14
+114.0
+1
+
+BUTTON
+445
+57
+508
+90
+del
+sound:delete-voice 3 0 3
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+448
+132
+511
+165
+del
+sound:delete-voice 2 0 3
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+448
+212
+511
+245
+del
+sound:delete-voice 1 0 3
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+450
+297
+513
+330
+del
+sound:delete-voice 0 0 3
 NIL
 1
 T

@@ -24,28 +24,30 @@ public class Play implements Command {
 
 	int note = 60;
 	int vel = 100;
-	int dur = 1000 / 16; // 16th note
+
 	ExtensionContext ec = (ExtensionContext) context;
 	Workspace ws = ec.workspace();
 	World w = ws.world();
-
+	Voice voc = null;
 	Patch p = null;
 	try {
 	    // Each drum on one patch only.
 	    for (int i = 0; i < P.NDRUMS; i++) {
-		P.drums[i].fd(1);
-		p = w.getPatchAt(P.drums[i].agent.xcor(),
-				 P.drums[i].agent.ycor());
+		voc = P.drums[i];
+		voc.fd(1);
+		p = w.getPatchAt(voc.agent.xcor(),
+				 voc.agent.ycor());
+		// brightness codes drum velocity!
 		if (!p.pcolor().equals(P.DBLACK)) {
 		    vel = (int)(127 * (((double)p.pcolor() - P.RCOLOR) / 9.0));
-		    SoundExtension.playDrum(P.drums[i].instrument,vel);
+		    SoundExtension.playDrum(voc.instrument,vel);
 		}
 	    }
-	    // Voices occupy many patches at one xcor value.
-	    // Only one patch can have a note.
-	    vel = 100;
+	    // Voices occupy many patches at one xcor value, but are
+	    // univocal: only one patch can have a note.
 	    for (int i = 0; i < P.NVOICES; i++) {
-		P.voices[i].fd(1);
+		voc = P.voices[i];
+		voc.fd(1);
 		note = getNote(w,i);
 		playnote(i,note);
 	    }
@@ -53,14 +55,19 @@ public class Play implements Command {
 	} catch (org.nlogo.api.AgentException ex) {}
     }
 
-    public static void playnote(int vid,int note) throws ExtensionException {
+    // Play note for voice id.
+    // SoundExension.playNote is in terms of msec,
+    // but v.dur is in minimal note unit.
+    // playWav ignores v.dur and plays out the entire wav.
+    public static void playnote(int vid,int note)
+	throws ExtensionException {
 	Voice v = P.voices[vid];
 	if (note > -1) {
 	    if (v.isMidi()) 
 		SoundExtension.playNote(v.instrument,
 					v.note(note),
 					v.vel,
-					v.dur);
+					v.dur * P.MIN_NOTE_DUR);
 	    else
 		SoundExtension.playWav(v,note,
 				       v.dur);
@@ -69,7 +76,8 @@ public class Play implements Command {
 
 
     /* 
-       Return note for colored patch governed by this voice; -1 if none found.
+       Return note for colored patch governed by this voice; -1 if
+       none found.
      */
     public static int getNote(World w, int vid) throws AgentException {
 	Patch p = null;
@@ -79,7 +87,7 @@ public class Play implements Command {
 	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
 	    p = w.getPatchAt(x,y+i);
 	    if (!p.pcolor().equals(P.DBLACK)) {
-		return i;// P.voices[vid].note(i);
+		return i;
 	    }
 	}
 	return -1; // no colored patch found

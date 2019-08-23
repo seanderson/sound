@@ -61,9 +61,14 @@ public class Init implements Command {
     */
     
     private void initDrawing(World w, ExtensionContext context) {
+	int alpha = 100;
+	java.awt.Color white_trans = new java.awt.Color(255,255,255,alpha);
+	java.awt.Color gray_trans = new java.awt.Color(100,100,100,alpha);
+	java.awt.Color gray_verytrans = new java.awt.Color(100,100,100,alpha/2);
+
 	java.awt.image.BufferedImage drawing = context.getDrawing();
 	Graphics2D g = drawing.createGraphics();
-	g.setColor(java.awt.Color.WHITE);
+	g.setColor(white_trans);
 	g.setStroke(new BasicStroke(1*P.LINE_THICKNESS));
 	int xmax = (int) (P.XMAX * P.PATCHSIZE);
 	int ymax = (int) (P.YMAX * P.PATCHSIZE);
@@ -73,19 +78,23 @@ public class Init implements Command {
 	    g.drawLine(0,y,xmax,y);	
 	}
 	// Draw lines at each beat
-	g.setColor(java.awt.Color.GRAY);
+	g.setColor(gray_trans);
 	g.setStroke(new BasicStroke(P.LINE_THICKNESS));
-	// draw measure delimiters
+	int y0 = (int) -P.PATCHSIZE;
 	for (int x = 0; x < xmax;
 	     x += 4 * P.PATCHSIZE) {
-	    g.drawLine(x,0,x,ymax);	
+	    if ( (x / (4 * P.PATCHSIZE)) % 2 == 1) // upbeats 2 and 4
+		g.setColor(gray_verytrans);
+	    else
+		g.setColor(gray_trans);
+	    g.drawLine(x,y0,x,ymax);	
 	}
 	// draw measure delimiters
-	g.setColor(java.awt.Color.WHITE);
+	g.setColor(white_trans);
 	g.setStroke(new BasicStroke(2*P.LINE_THICKNESS));
 	for (int x = 0; x < xmax;
 	     x += P.MAXNOTESPERMEASURE * P.PATCHSIZE) {
-	    g.drawLine(x,0,x,ymax);	
+	    g.drawLine(x,y0,x,ymax);	
 	}
 
 	
