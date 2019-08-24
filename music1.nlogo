@@ -4,11 +4,13 @@ to init
   clear-all
   sound:init
   sound:set-parameter "BPM" bpm
-  sound:rhythm 0 4 4 "7-------1-------"
-  sound:rhythm 5 4 4 "--------4---4---"
-  ;;sound:rhythm 6 4 4 "--4---4---4---4-"
 
-  sound:set-voice-instrument 0 "VIOLIN"
+  ;;                  "1---2---3---4---"
+  sound:rhythm 0  4 4 "7-------5-------"
+  sound:rhythm 5  4 4 "----4-------4---"
+  sound:rhythm 14 4 4 "-----5-------6--"
+
+  sound:set-voice-instrument 0 "CELLO"
   sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
   sound:set-voice-waveform 2 "wav" "meow"
   sound:set-voice-instrument 3 "FLUTE"
@@ -16,6 +18,10 @@ to init
   sound:set-voice-duration 1 8
   sound:set-voice-duration 3 2
 
+  sound:set-scale 0 40 "MAJOR 7"
+  sound:set-scale 1 52 "MAJOR 7"
+  sound:set-scale 2 64 "MAJOR 7"
+  sound:set-scale 3 72 "MAJOR 7"
 
 end
 
@@ -27,6 +33,105 @@ to go
   every 15.0 / bpm [
     sound:play
   ]
+
+end
+
+
+to doit
+sound:play-drum "ACOUSTIC BASS DRUM" 64
+wait 1.5
+sound:play-drum  "BASS DRUM 1" 64
+wait 1.5
+sound:play-drum  "SIDE STICK" 64
+wait 1.5
+sound:play-drum  "ACOUSTIC SNARE" 64
+wait 1.5
+sound:play-drum  "HAND CLAP" 64
+wait 1.5
+sound:play-drum  "ELECTRIC SNARE" 64
+wait 1.5
+sound:play-drum  "LOW FLOOR TOM" 64
+wait 1.5
+sound:play-drum  "CLOSED HI HAT" 64
+wait 1.5
+sound:play-drum  "HI FLOOR TOM" 64
+wait 1.5
+sound:play-drum  "PEDAL HI HAT" 64
+wait 1.5
+sound:play-drum  "LOW TOM" 64
+wait 1.5
+sound:play-drum  "OPEN HI HAT" 64
+wait 1.5
+sound:play-drum  "LOW MID TOM" 64
+wait 1.5
+sound:play-drum  "HI MID TOM" 64
+wait 1.5
+sound:play-drum  "CRASH CYMBAL 1" 64
+wait 1.5
+sound:play-drum  "HI TOM" 64
+wait 1.5
+sound:play-drum  "RIDE CYMBAL 1" 64
+wait 1.5
+sound:play-drum  "CHINESE CYMBAL" 64
+wait 1.5
+sound:play-drum  "RIDE BELL" 64
+wait 1.5
+sound:play-drum  "TAMBOURINE" 64
+wait 1.5
+sound:play-drum  "SPLASH CYMBAL" 64
+wait 1.5
+sound:play-drum  "COWBELL" 64
+wait 1.5
+sound:play-drum  "CRASH CYMBAL 2" 64
+wait 1.5
+sound:play-drum  "VIBRASLAP" 64
+wait 1.5
+sound:play-drum  "RIDE CYMBAL 2" 64
+wait 1.5
+sound:play-drum  "HI BONGO" 64
+wait 1.5
+sound:play-drum  "LOW BONGO" 64
+wait 1.5
+sound:play-drum  "MUTE HI CONGA" 64
+wait 1.5
+sound:play-drum  "OPEN HI CONGA" 64
+wait 1.5
+sound:play-drum  "LOW CONGA" 64
+wait 1.5
+sound:play-drum  "HI TIMBALE" 64
+wait 1.5
+sound:play-drum  "LOW TIMBALE" 64
+wait 1.5
+sound:play-drum  "HI AGOGO" 64
+wait 1.5
+sound:play-drum  "LOW AGOGO" 64
+wait 1.5
+sound:play-drum  "CABASA" 64
+wait 1.5
+sound:play-drum  "MARACAS" 64
+wait 1.5
+sound:play-drum  "SHORT WHISTLE" 64
+wait 1.5
+sound:play-drum  "LONG WHISTLE" 64
+wait 1.5
+sound:play-drum  "SHORT GUIRO" 64
+wait 1.5
+sound:play-drum  "LONG GUIRO" 64
+wait 1.5
+sound:play-drum  "CLAVES" 64
+wait 1.5
+sound:play-drum  "HI WOOD BLOCK" 64
+wait 1.5
+sound:play-drum  "LOW WOOD BLOCK" 64
+wait 1.5
+sound:play-drum  "MUTE CUICA" 64
+wait 1.5
+sound:play-drum   "OPEN CUICA" 64
+wait 1.5
+sound:play-drum  "MUTE TRIANGLE" 64
+wait 1.5
+sound:play-drum  "OPEN TRIANGLE" 64
+
 
 end
 @#$#@#$#@
@@ -117,7 +222,7 @@ bpm
 bpm
 1
 200
-121.0
+73.0
 1
 1
 NIL

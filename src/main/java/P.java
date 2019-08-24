@@ -30,10 +30,35 @@ public class P {
     static Voice[] voices;
     static Voice[] drums;
     static int MIN_NOTE_DUR = 0; // duration, in msec, of smallest note.
-    // list of drums
-    static int[] dlist = {35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
-    // list of instruments
-    static int[] vlist = {0,25,41,74,92,0,0,0,0,0,0,0,0,0,0};
+
+    // For initial drums, low to hi
+    static final String[] DEFAULT_DRUMS = {
+	"ACOUSTIC BASS DRUM",
+	"ACOUSTIC SNARE",
+	"ELECTRIC SNARE",
+	"HI TOM",
+	"LOW MID TOM",
+	"LOW TOM",
+	"HI BONGO",
+	"LOW BONGO",
+	"HI WOOD BLOCK",
+	"LOW WOOD BLOCK",
+	"HAND CLAP",
+	"CABASA",
+	"OPEN HI HAT",
+	"CLOSED HI HAT",
+	"RIDE CYMBAL 1",
+	"SHORT WHISTLE"
+    };
+    // For initial voices, low to hi
+    static final String[] DEFAULT_INSTRUMENTS = {
+	"CELLO",
+	"ACOUSTIC GRAND PIANO",
+	"CLARINET",
+	"ALTO SAX",
+	"FLUTE",
+	"PICCOLO"};
+
     static AudMixer mixer; // plays all wavs on single line
     
     public P() {
