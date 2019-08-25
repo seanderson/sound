@@ -6,8 +6,8 @@ package org.nlogo.extensions.sound;
 public class P {
     static int BEATSPERMINUTE = 80;
     static int BEATSPERMEASURE = 4;
-    static int SAMPLERATE = 44100; // for wavs
-    static int SAMPLESIZE = 16; // 16-bit precision for wavs
+    final static int SAMPLERATE = 44100; // for wavs
+    final static int SAMPLESIZE = 16; // 16-bit precision for wavs
     static int NMEASURES = 4; // measures in one lick (pattern)
     static int MAXNOTESPERMEASURE = 16;
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
@@ -15,7 +15,8 @@ public class P {
     static int PATCHESPERVOICE = 16; // possible notes 
     static int XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
     static int YMAX = (NVOICES + 1) * PATCHESPERVOICE;
-    static Double PATCHSIZE = new Double(5.0);
+    final static int VELOCITY_MAX = 127;
+    static Double PATCHSIZE = new Double(7.0);
     static boolean WRAP = true;
     static int LINE_THICKNESS = 1; // for drawing over patches
     static double BLACK = 0;
@@ -31,18 +32,19 @@ public class P {
     static Voice[] drums;
     static int MIN_NOTE_DUR = 0; // duration, in msec, of smallest note.
 
+
     // For initial drums, low to hi
     static final String[] DEFAULT_DRUMS = {
 	"ACOUSTIC BASS DRUM",
 	"ACOUSTIC SNARE",
 	"ELECTRIC SNARE",
-	"HI TOM",
-	"LOW MID TOM",
 	"LOW TOM",
-	"HI BONGO",
+	"LOW MID TOM",
+	"HI TOM",
 	"LOW BONGO",
-	"HI WOOD BLOCK",
+	"HI BONGO",
 	"LOW WOOD BLOCK",
+	"HI WOOD BLOCK",
 	"HAND CLAP",
 	"CABASA",
 	"OPEN HI HAT",
@@ -55,7 +57,6 @@ public class P {
 	"CELLO",
 	"ACOUSTIC GRAND PIANO",
 	"CLARINET",
-	"ALTO SAX",
 	"FLUTE",
 	"PICCOLO"};
 

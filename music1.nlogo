@@ -136,13 +136,13 @@ sound:play-drum  "OPEN TRIANGLE" 64
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-102
+122
 10
-430
-424
+578
+586
 -1
 -1
-5.0
+7.0
 1
 10
 1
@@ -246,10 +246,10 @@ NIL
 1
 
 SLIDER
-100
-429
-436
-462
+123
+596
+579
+629
 time
 time
 -1
@@ -278,60 +278,60 @@ NIL
 1
 
 TEXTBOX
-445
-32
-595
-50
+602
+45
+752
+63
 Voice 3
 14
 114.0
 1
 
 TEXTBOX
-454
-371
-604
-389
+610
+517
+760
+535
 Rhythm
 14
 25.0
 1
 
 TEXTBOX
-450
-278
-600
-296
+609
+382
+759
+400
 Voice 0
 14
 114.0
 1
 
 TEXTBOX
-447
-112
-597
-130
+603
+171
+753
+189
 Voice 2
 14
 114.0
 1
 
 TEXTBOX
-449
-193
-599
-211
+606
+274
+756
+292
 Voice 1
 14
 114.0
 1
 
 BUTTON
-445
-57
-508
-90
+602
+70
+665
+103
 del
 sound:delete-voice 3 0 3
 NIL
@@ -345,10 +345,10 @@ NIL
 1
 
 BUTTON
-448
-132
-511
-165
+604
+191
+667
+224
 del
 sound:delete-voice 2 0 3
 NIL
@@ -362,10 +362,10 @@ NIL
 1
 
 BUTTON
-448
-212
-511
-245
+605
+293
+668
+326
 del
 sound:delete-voice 1 0 3
 NIL
@@ -379,10 +379,10 @@ NIL
 1
 
 BUTTON
-450
-297
-513
-330
+609
+401
+672
+434
 del
 sound:delete-voice 0 0 3
 NIL

@@ -4,10 +4,11 @@ import org.nlogo.agent.AgentSet;
 import org.nlogo.agent.Turtle;
 import org.nlogo.agent.World;
 import org.nlogo.api.ExtensionException;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.sound.sampled.LineUnavailableException;
+//import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -28,138 +29,177 @@ public class Voice {
     String type;
 
     /**
-       Create a new voice corresponds to one turtle.
-    */
-    public Voice (World w,int instr,Double color,
-		  double x, double y, int size,
-		  int tonic, String type )
-	throws ExtensionException {
-	wav = new short[P.PATCHESPERVOICE][];
-	notes = new int[P.PATCHESPERVOICE];
-	this.tonic = tonic;
-	this.type = type;
-	setScale(tonic,this.type);
-	AgentSet breed = w.turtles();
-	agent = w.createTurtle(breed,1,0); //color.intValue(),0);
-	this.instrument = instr;
-	try {
-	    agent.xandycor(x,y);
-	    agent.heading(0.0);
-	    agent.shape("line");
-	    agent.size(size);//P.PATCHESPERVOICE);
-	} catch (org.nlogo.api.AgentException ex) {
-	    throw new org.nlogo.api.ExtensionException("Bad agent in Voice."
-						       + ex.getMessage());
-	}
+     * Create a new voice corresponds to one turtle.
+     */
+    public Voice(World w, int instr, Double color,
+                 double x, double y, int size,
+                 int tonic, String type)
+            throws ExtensionException {
+        wav = new short[P.PATCHESPERVOICE][];
+        notes = new int[P.PATCHESPERVOICE];
+        this.tonic = tonic;
+        this.type = type;
+        setScale(tonic, this.type);
+        AgentSet breed = w.turtles();
+        agent = w.createTurtle(breed, 1, 0); //color.intValue(),0);
+        this.instrument = instr;
+        try {
+            agent.xandycor(x, y);
+            agent.heading(0.0);
+            agent.shape("line");
+            agent.size(size);//P.PATCHESPERVOICE);
+        } catch (org.nlogo.api.AgentException ex) {
+            throw new org.nlogo.api.ExtensionException("Bad agent in Voice."
+                    + ex.getMessage());
+        }
     }
+
     /*
       Move voice some patches to the east.
       @param step num patches to move.
     */
     public void fd(int step) throws ExtensionException {
-	try {
-	    agent.xcor( step + agent.xcor() );
-	} catch (org.nlogo.api.AgentException ex) {
-	    throw new org.nlogo.api.ExtensionException("Bad agent in fd."
-						       + ex.getMessage());
-	}
+        try {
+            agent.xcor(step + agent.xcor());
+        } catch (org.nlogo.api.AgentException ex) {
+            throw new org.nlogo.api.ExtensionException("Bad agent in fd."
+                    + ex.getMessage());
+        }
     }
 
-    public boolean isMidi() { return this.isMidi; }
-    
+    public boolean isMidi() {
+        return this.isMidi;
+    }
+
     /**
-       Return index of note at position i for this voice.
-    */
+     * Return index of note at position i for this voice.
+     */
     public int note(int i) {
-	if (i < 0 || i >= P.PATCHESPERVOICE) return 0;
-	return notes[i];
+        if (i < 0 || i >= P.PATCHESPERVOICE) return 0;
+        return notes[i];
     }
 
     /**
-       Set up all notes for voice, based on tonic and scale name.
-    */
+     * Set up all notes for voice, based on tonic and scale name.
+     */
     public void setScale(int tonic, String name)
-    throws ExtensionException {
-	if ( tonic < 20 || tonic > 108) return; // hard limits
-	if (name.equals(Scale.PENTATONIC) ) {
-	    int [] master_scale = Scale.getScale(name);
-	    for (int i = 0; i < P.PATCHESPERVOICE; i++) {
-		// Shift scale up one octave
-		if (i % master_scale.length == 0 && i != 0) {
-		    tonic += 12;
-		}
-		this.notes[i] = tonic + master_scale[ (i % master_scale.length) ];
-	    }
-	}
+            throws ExtensionException {
+        if (tonic < 20 || tonic > 108) return; // hard limits
+        int[] master_scale = Scale.getScale(name);
+        for (int i = 0; i < P.PATCHESPERVOICE; i++) {
+            // Shift scale up one octave
+            if (i % master_scale.length == 0 && i != 0) {
+                tonic += 12;
+            }
+            this.notes[i] = tonic + master_scale[(i % master_scale.length)];
+        }
     }
-
 
     /*
       Currently all waveforms must pass these tests.
     */
     private boolean checkFormat(AudioFormat f) {
-	if (f.getChannels() != 1 ||
-	    f.getSampleRate() != P.SAMPLERATE ||
-	    f.isBigEndian() == true ||
-	    f.getSampleSizeInBits() != P.SAMPLESIZE) {
-	    return false;
-	}
-	
-	return true;  // all ok
+        if (f.getChannels() != 1 ||
+                f.getSampleRate() != P.SAMPLERATE ||
+                f.isBigEndian() == true ||
+                f.getSampleSizeInBits() != P.SAMPLESIZE) {
+            return false;
+        }
+
+        return true;  // all ok
     }
 
     /*
       Convert bytes to little-endian shorts.
     */
     private short[] toShort(byte[] arr) {
-	ByteBuffer bb = ByteBuffer.wrap(arr);
-	bb.order( ByteOrder.LITTLE_ENDIAN);
-	short[] out = new short[arr.length/2];
-	for (int i = 0; i < arr.length; i+=2) {
-	    out[i/2] = bb.getShort(i);
-	}
-	return out;
+        ByteBuffer bb = ByteBuffer.wrap(arr);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        short[] out = new short[arr.length / 2];
+        for (int i = 0; i < arr.length; i += 2) {
+            out[i / 2] = bb.getShort(i);
+        }
+        return out;
     }
-    
+
     /**
-       Set all wavefiles for this voice.
-       Assumes dir/wavfile-N.wav where N=0...P.PATCHESPERVOICE
-    */
+     * Set all wavefiles for this voice.
+     * Assumes dir/wavfile-N.wav where N=0...P.PATCHESPERVOICE
+     */
     public void setWaveform(String dir, String wavfile)
-	throws ExtensionException {
-	isMidi = false;
-	wav = new short[P.PATCHESPERVOICE][];
-	
-	for (int i = 0; i < P.PATCHESPERVOICE; i++) {
-	    try {
-		// Files names with midi number (notes[i])
-		File file = new File(dir + "/" + wavfile + "-" + notes[i] + ".wav");
+            throws ExtensionException {
+        isMidi = false;
+        wav = new short[P.PATCHESPERVOICE][];
 
-		AudioInputStream stream = AudioSystem.getAudioInputStream(file);
-		format = stream.getFormat();
-		if (!checkFormat(format))
-		    throw new UnsupportedAudioFileException();
-		int bytesavailable = stream.available();
-		if (bytesavailable > 0) {
-		    byte[] tmp = new byte[bytesavailable];
-		    stream.read(tmp,0,bytesavailable);
-		    // keep bytes in array of shorts
-		    wav[i] = toShort(tmp);
-		}
-		else wav[i] = null;
-		stream.close();
+        for (int i = 0; i < P.PATCHESPERVOICE; i++) {
+            try {
+                // Files names with midi number (notes[i])
+                File file = new File(dir + "/" + wavfile + "-" + notes[i] + ".wav");
 
-	    } catch (UnsupportedAudioFileException ex1) {
-		wav[i] = null;
-		throw new ExtensionException("Audio exception: " + ex1.getMessage());
-	    } catch (IOException ex2) {
-		wav[i] = null;
-		throw new ExtensionException("Wav file not found: " + ex2.getMessage());
+                AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+                format = stream.getFormat();
+                if (!checkFormat(format))
+                    throw new UnsupportedAudioFileException();
+                int bytesavailable = stream.available();
+                if (bytesavailable > 0) {
+                    byte[] tmp = new byte[bytesavailable];
+                    stream.read(tmp, 0, bytesavailable);
+                    // keep bytes in array of shorts
+                    wav[i] = toShort(tmp);
+                } else wav[i] = null;
+                stream.close();
 
-	    }
+            } catch (UnsupportedAudioFileException ex1) {
+                wav[i] = null;
+                throw new ExtensionException("Audio exception: " + ex1.getMessage());
+            } catch (IOException ex2) {
+                wav[i] = null;
+                throw new ExtensionException("Wav file not found: " + ex2.getMessage());
 
-	}
+            }
+
+        }
     } // setWaveform
 
+
+    /**
+     * Set wavefiles for this drum voice.
+     * Assumes dir/wavfile.wav
+     */
+    public void setDrumWaveform(String dir, String wavfile)
+            throws ExtensionException {
+        int PATCHESPERDRUM = 1;
+        isMidi = false;
+        wav = new short[PATCHESPERDRUM][];
+
+        for (int i = 0; i < PATCHESPERDRUM; i++) {
+            try {
+                // Files names with midi number (notes[i])
+                File file = new File(dir + "/" + wavfile + ".wav");
+
+                AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+                format = stream.getFormat();
+                if (!checkFormat(format))
+                    throw new UnsupportedAudioFileException();
+                int bytesavailable = stream.available();
+                if (bytesavailable > 0) {
+                    byte[] tmp = new byte[bytesavailable];
+                    stream.read(tmp, 0, bytesavailable);
+                    // keep bytes in array of shorts
+                    wav[i] = toShort(tmp);
+                } else wav[i] = null;
+                stream.close();
+
+            } catch (UnsupportedAudioFileException ex1) {
+                wav[i] = null;
+                throw new ExtensionException("Audio exception: " + ex1.getMessage());
+            } catch (IOException ex2) {
+                wav[i] = null;
+                throw new ExtensionException("Wav file not found: " + ex2.getMessage());
+
+            }
+
+        }
+    } // setDrumWaveform
 
 }

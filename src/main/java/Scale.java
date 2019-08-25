@@ -20,14 +20,15 @@ public class Scale implements Command {
     static class Type {
 	static int[] tones;
 	static String name;
-	static String[] names = {"PENTATONIC","PENTATONIC_MINOR",
-				 "BLUES","MAJOR_7",
-				 "WHOLE_TONE"};
+	static String[] names = {"PENTATONIC","PENTATONIC MINOR",
+				 "BLUES","MAJOR 7","MINOR 7",
+				 "WHOLE TONE"};
 	static final int[][] SCALES = {
 	    {0,2,5,7,9},    // pentatonic
 	    {0,3,5,7,10},   // pent. minor
 	    {0,3,4,5,7,10}, // blues
 	    {0,4,7,11},     // major 7
+	    {0,3,7,10},     // minor 7
 	    {0,2,4,6,8,10} // whole tone
 	};
 
@@ -36,7 +37,8 @@ public class Scale implements Command {
     public static String PENTATONIC_MINOR = Type.names[1];
     public static String BLUES = Type.names[2];
     public static String MAJOR_7 = Type.names[3];
-    public static String WHOLE_TONE = Type.names[4];
+    public static String MINOR_7 = Type.names[4];
+    public static String WHOLE_TONE = Type.names[5];
 
     public static int[] getScale(String name)
 	throws ExtensionException {
@@ -46,11 +48,7 @@ public class Scale implements Command {
 	}
 	throw new ExtensionException("Scale undefined: " + name);
     }
-
-
     
-    
-  // voice, take beats, base note time, string of 16 chars "9-------4-------"
   public Syntax getSyntax() {
       // set-scale VOICEID TONIC SCALENAME
       // Assumes TONIC is lowest midi value.

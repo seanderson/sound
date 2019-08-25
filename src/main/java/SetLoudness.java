@@ -7,11 +7,9 @@ import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.Context;
 
 /**
- * Set duration of all notes for this voice.
- * Duration is in integer terms of 1/MAXNOTESPERMEASURE
- * and must be >= 1 and < P.XMAX.
+ * Set velocity (volume) for this voice: range 0 to 127
  */
-public class SetDuration implements Command {
+public class SetLoudness implements Command {
 
     public Syntax getSyntax() {
         return SyntaxJ.commandSyntax(new int[]{
@@ -23,23 +21,24 @@ public class SetDuration implements Command {
     public void perform(Argument args[], Context context)
             throws ExtensionException {
         int vid;
-        int dur;
+        int vel;
 
         try {
             vid = args[0].getIntValue();
-            dur = args[1].getIntValue();
+            vel = args[1].getIntValue();
         } catch (LogoException e) {
-            throw new ExtensionException("Error in SetDuration: " + e.getMessage());
+            throw new ExtensionException("Error in SetLoudness: " + e.getMessage());
         }
 
 
         if (vid < 0 || vid >= P.NVOICES)
-            throw new ExtensionException("Bad voice ID: " + vid + " in SetDuration");
-        if (dur <= 0 || dur > P.XMAX)
-            throw new ExtensionException("Bad note duration: " + dur + " in SetDuration");
+            throw new ExtensionException("Bad voice ID: " + vid + " in SetLoudness");
+        if (vel < 0 || vel > P.VELOCITY_MAX)
+            throw new ExtensionException("Bad note velocity: " + vel + " in SetLoudness");
 
-        P.voices[vid].dur = dur;
+        P.voices[vid].vel = vel;
 
 
     }
 }
+

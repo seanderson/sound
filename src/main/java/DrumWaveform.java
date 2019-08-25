@@ -6,19 +6,13 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.Context;
 
-//import org.nlogo.nvm.Workspace;
-//import org.nlogo.nvm.ExtensionContext;
-//import org.nlogo.api.WorldResizer;
-//
-//import org.nlogo.agent.World;
-//import org.nlogo.agent.Patch;
 
 /**
- * Set scale/tonic for a voice.
+ * Set waveform for a drum voice.
  */
-public class Waveform implements Command {
+public class DrumWaveform implements Command {
 
-    // set-waveform VOICEID DIR WAV.  Use waveform to generate scale.
+    // set-waveform VOICEID DIR WAV.  Use waveform for this drum.
     // DIR is relative to current directory.
     public Syntax getSyntax() {
         return SyntaxJ.commandSyntax(new int[]{
@@ -43,9 +37,12 @@ public class Waveform implements Command {
             return;
         }
 
-        if (vid < 0 || vid >= P.NVOICES)
-            throw new ExtensionException("Bad voice " + vid);
+        if (vid < 0 || vid >=
+                P.NDRUMS)
+            throw new ExtensionException("Bad drum voice " + vid);
 
-        P.voices[vid].setWaveform(dir, wavfile);
+        P.drums[vid].setDrumWaveform(dir, wavfile);
     }
 }
+
+
