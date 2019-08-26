@@ -113,7 +113,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("set-time", new SetTime());
         primManager.addPrimitive("set-parameter", new SetParams());
         primManager.addPrimitive("set-drum", new SetDrum());
-
+        primManager.addPrimitive("delete-drum", new DeleteDrum());
 
         // end music additions
         primManager.addPrimitive("drums", new ListDrums());

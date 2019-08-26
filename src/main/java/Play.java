@@ -78,12 +78,16 @@ public class Play implements Command {
     public static void playdrumnote(Voice voc, double pcolor)
             throws ExtensionException {
         // brightness encodes velocity
-        int vel = (int) (127 * ((pcolor - P.RCOLOR) / 9.0));
 
-            if (voc.isMidi())
+
+            if (voc.isMidi()) {
+                int vel = (int) (127 * ((pcolor - P.RCOLOR) / 9.0));
                 SoundExtension.playDrum(voc.instrument, vel);
-            else
-                SoundExtension.playDrumWav(voc, 0);
+            }
+            else {
+                int vel = (int) (10 * ((pcolor - P.RCOLOR) / 9.0));
+                SoundExtension.playDrumWav(voc, vel);
+            }
         }
 
 

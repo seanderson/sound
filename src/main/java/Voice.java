@@ -168,11 +168,11 @@ public class Voice {
      */
     public void setDrumWaveform(String dir, String wavfile)
             throws ExtensionException {
-        int PATCHESPERDRUM = 1;
+        int PATCHESPERDRUM = 10;  // We create 10 different volumes for a drum waveform!
         isMidi = false;
         wav = new short[PATCHESPERDRUM][];
 
-        for (int i = 0; i < PATCHESPERDRUM; i++) {
+        int i = PATCHESPERDRUM / 2;
             try {
                 // Files names with midi number (notes[i])
                 File file = new File(dir + "/" + wavfile + ".wav");
@@ -191,15 +191,36 @@ public class Voice {
                 stream.close();
 
             } catch (UnsupportedAudioFileException ex1) {
-                wav[i] = null;
+                for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
                 throw new ExtensionException("Audio exception: " + ex1.getMessage());
             } catch (IOException ex2) {
-                wav[i] = null;
+                for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
                 throw new ExtensionException("Wav file not found: " + ex2.getMessage());
+            }
+        // Create drums at all volumes above/below wav[i]
+        addVolumes(wav,i);
 
+    } // setDrumWaveform
+
+    /*
+       Fill wav, except wav[pos], with copies of
+       wav[pos] scaled by a = exp ( b * sample), to yield
+       approximate 60dB of range.  See https://www.dr-lex.be/info-stuff/volumecontrols.html
+
+     */
+    private void addVolumes(short[][] wav, int pos) {
+        double a = 0.01;
+        double b = 6.908;
+        for (int i = 0; i < wav.length; i++) {
+            if (i  == pos) continue;
+            wav[i] = new short[wav[pos].length];
+            double factor = a * Math.exp(b * (0.1 * i));
+            for (int j = 0; j < wav[i].length; j++) {
+                wav[i][j] = (short) (factor * wav[pos][j]);
             }
 
         }
-    } // setDrumWaveform
+    }
+
 
 }

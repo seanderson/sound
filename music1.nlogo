@@ -4,12 +4,11 @@ to init
   clear-all
   sound:init
   sound:set-parameter "BPM" bpm
+  set-rhythm
+  set-voices
+end
 
-  ;;                  "1---2---3---4---"
-  sound:rhythm 0  4 4 "7-------5-------"
-  sound:rhythm 5  4 4 "----4-------4---"
-  sound:rhythm 14 4 4 "-----5-------6--"
-
+to set-voices
   sound:set-voice-instrument 0 "CELLO"
   sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
   sound:set-voice-waveform 2 "wav" "meow"
@@ -21,8 +20,16 @@ to init
   sound:set-scale 0 40 "MAJOR 7"
   sound:set-scale 1 52 "MAJOR 7"
   sound:set-scale 2 64 "MAJOR 7"
-  sound:set-scale 3 72 "MAJOR 7"
+  sound:set-scale 3 76 "MAJOR 7"
+end
 
+to set-rhythm
+  ;;                  "1---2---3---4---"
+  sound:rhythm 0  4 4 "4-------1-------"
+  sound:rhythm 5  4 4 "----4-------4---"
+  sound:rhythm 9  4 4 "0223222302240240"
+  sound:rhythm 14 4 4 "-----5-------6--"
+  sound:set-drum-waveform 0 "wav" "click"
 end
 
 to go
@@ -33,6 +40,27 @@ to go
   every 15.0 / bpm [
     sound:play
   ]
+end
+
+to playloop [ a b ]
+  every 15.0 / bpm [
+    sound:play
+    if ([xcor] of turtle 0 > b) [
+      sound:set-time a
+    ]
+  ]
+end
+
+to test1
+  sound:copy-voice 1 0 3 0 1 0
+  sound:copy-voice 1 0 3 2 1 0
+  sound:copy-voice 1 0 3 1 1 -3
+  sound:copy-voice 1 0 1 2 1 4
+  sound:copy-voice 1 0 3 3 1 0
+end
+
+to test2
+  sound:copy-voice 1 2 2 2 2 3
 
 end
 
@@ -222,7 +250,7 @@ bpm
 bpm
 1
 200
-73.0
+120.0
 1
 1
 NIL
@@ -386,6 +414,57 @@ BUTTON
 del
 sound:delete-voice 0 0 3
 NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+29
+487
+99
+520
+NIL
+test1
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+29
+534
+99
+567
+NIL
+test2
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+9
+264
+156
+297
+NIL
+playloop 16 48
+T
 1
 T
 OBSERVER
