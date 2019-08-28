@@ -16,7 +16,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Voice {
-    Double color; // color of voice's trail
     Turtle agent; // a turtle
     int instrument; // index in SoundExtension.INSTRUMENT_NAMES
     int[] notes; // set of notes for this instrument.  Lowest is tonic.
@@ -27,6 +26,8 @@ public class Voice {
     int vel = 100; // velocity
     int tonic = 48;
     String type;
+    String dir; // wavfile's directory relative to model
+    String wavfile;
 
     /**
      * Create a new voice corresponds to one turtle.
@@ -128,7 +129,9 @@ public class Voice {
      */
     public void setWaveform(String dir, String wavfile)
             throws ExtensionException {
-        isMidi = false;
+        this.isMidi = false;
+        this.dir = dir;
+        this.wavfile = wavfile;
         wav = new short[P.PATCHESPERVOICE][];
 
         for (int i = 0; i < P.PATCHESPERVOICE; i++) {
@@ -173,54 +176,64 @@ public class Voice {
         wav = new short[PATCHESPERDRUM][];
 
         int i = PATCHESPERDRUM / 2;
-            try {
-                // Files names with midi number (notes[i])
-                File file = new File(dir + "/" + wavfile + ".wav");
+        try {
+            // Files names with midi number (notes[i])
+            File file = new File(dir + "/" + wavfile + ".wav");
 
-                AudioInputStream stream = AudioSystem.getAudioInputStream(file);
-                format = stream.getFormat();
-                if (!checkFormat(format))
-                    throw new UnsupportedAudioFileException();
-                int bytesavailable = stream.available();
-                if (bytesavailable > 0) {
-                    byte[] tmp = new byte[bytesavailable];
-                    stream.read(tmp, 0, bytesavailable);
-                    // keep bytes in array of shorts
-                    wav[i] = toShort(tmp);
-                } else wav[i] = null;
-                stream.close();
+            AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+            format = stream.getFormat();
+            if (!checkFormat(format))
+                throw new UnsupportedAudioFileException();
+            int bytesavailable = stream.available();
+            if (bytesavailable > 0) {
+                byte[] tmp = new byte[bytesavailable];
+                stream.read(tmp, 0, bytesavailable);
+                // keep bytes in array of shorts
+                wav[i] = toShort(tmp);
+            } else wav[i] = null;
+            stream.close();
 
-            } catch (UnsupportedAudioFileException ex1) {
-                for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
-                throw new ExtensionException("Audio exception: " + ex1.getMessage());
-            } catch (IOException ex2) {
-                for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
-                throw new ExtensionException("Wav file not found: " + ex2.getMessage());
-            }
+        } catch (UnsupportedAudioFileException ex1) {
+            for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
+            throw new ExtensionException("Audio exception: " + ex1.getMessage());
+        } catch (IOException ex2) {
+            for (i = 0; i < PATCHESPERDRUM; i++) wav[i] = null;
+            throw new ExtensionException("Wav file not found: " + ex2.getMessage());
+        }
         // Create drums at all volumes above/below wav[i]
-        addVolumes(wav,i);
+        addVolumes(wav, i);
 
     } // setDrumWaveform
 
     /*
        Fill wav, except wav[pos], with copies of
-       wav[pos] scaled by a = exp ( b * sample), to yield
-       approximate 60dB of range.  See https://www.dr-lex.be/info-stuff/volumecontrols.html
+       wav[pos].  Rescale orignal to fill loudest position with
+       a max sample of MAX_VALUE.  Rescale downward by factor subtracting
+       about 2-3dB.  See https://www.dr-lex.be/info-stuff/volumecontrols.html
 
      */
+
     private void addVolumes(short[][] wav, int pos) {
-        double a = 0.01;
-        double b = 6.908;
-        for (int i = 0; i < wav.length; i++) {
-            if (i  == pos) continue;
-            wav[i] = new short[wav[pos].length];
-            double factor = a * Math.exp(b * (0.1 * i));
-            for (int j = 0; j < wav[i].length; j++) {
-                wav[i][j] = (short) (factor * wav[pos][j]);
+        int len = wav[pos].length;
+
+        double maxval = wav[pos][Utils.findAbsMax(wav[pos])];
+        int last = wav.length - 1;
+        wav[last] = new short[len];
+        // Make loudest in wav[last]
+        double factor = Short.MAX_VALUE / maxval;
+        for (int j = 0; j < len; j++) {
+            wav[last][j] = (short) (factor * wav[pos][j]);
+        }
+        factor = 0.85;
+        for (int i = last - 1; i > -1; i--) {
+            wav[i] = new short[len];
+            for (int j = 0; j < len; j++) {
+                wav[i][j] = (short) (factor * wav[i + 1][j]);
             }
 
         }
     }
+
 
 
 }

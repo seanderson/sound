@@ -2,14 +2,9 @@ package org.nlogo.extensions.sound;
 
 import java.net.URL;
 
+import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
-//import javax.sound.sampled.AudioInputStream;
-//import javax.sound.sampled.AudioFormat;
-//import javax.sound.sampled.AudioSystem;
-//import javax.sound.sampled.DataLine;
-//import javax.sound.sampled.Clip;
-//import javax.sound.sampled.LineUnavailableException;
-//import java.io.IOException;
+import org.nlogo.core.CompilerException;
 
 public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
@@ -101,6 +96,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("paint-melody", new PaintMelody());
         primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
         primManager.addPrimitive("play", new Play());
+//        primManager.addPrimitive("save", new Save());
         primManager.addPrimitive("set-scale", new Scale());
         primManager.addPrimitive("set-voice-waveform", new Waveform());
         primManager.addPrimitive("set-voice-instrument", new SetInstrument());
@@ -304,56 +300,6 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
     }
 
 
-    /*
-      Thread for playing one audio clip. 
-    */
-
-    private static class PlayWavThread extends Thread {
-        Voice voc;
-        int note;
-
-        PlayWavThread(Voice voc, int note) {
-            super("PlayWavThread");
-            this.voc = voc;
-            this.note = note;
-        }
-
-        /* Build clip from data and play it. */
-        public void run() {
-
-            //	    try {
-            //clip = AudioSystem.getClip();
-            //clip.open(voc.format,voc.wav[note],0,voc.wav[note].length);
-            //clip.setFramePosition(0);
-            //clip.start();
-            //	    voc.srcline.start();
-            //	    voc.srcline.write(voc.wav[note],0,voc.wav[note].length);
-            //voc.srcline.drain();
-            //	    } /*catch (LineUnavailableException e) {
-            //	System.out.println("line unavailable");
-            //org.nlogo.api.Exceptions.ignore(e);
-            //} *//*catch (java.io.IOException e2) {
-            //	System.out.println("io " + e2.getMessage());
-            //org.nlogo.api.Exceptions.ignore(e2);
-            //}*/
-            //finally {
-            //long len = clip.getMicrosecondLength() / 1000; // msec
-            //try { Thread.sleep(len + 10); }
-            //catch (InterruptedException e) {
-            //    org.nlogo.api.Exceptions.ignore(e);
-            //}
-            //finally {
-            //    if (clip != null) {
-            //	clip.stop(); clip.flush(); clip.close();
-            //	    }
-            //	}
-            //catch (IOException e3) { org.nlogo.api.Exceptions.ignore(e3); }
-            //clip.setFramePosition(0);
-            //}
-
-        }
-    }
-
 
     /* Start thread to play the wav */
     static void playWav(Voice voc, int note, int dur)
@@ -366,18 +312,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         // first bit of wav.
         pos += AudMixer.BUFFER_SIZE_FRAMES + 10;
         P.mixer.mix(pos, voc.wav[note]);
-	/*	
-	long offset = 0; // offset position where mixer will copy
-	int num = 0; // number of shorts to copy
-	long len = voc.wav[note].length;
 
-	while (offset < len) {
-	    num = Math.min(len-pos,AudMixer.BUFFER_SIZE_FRAMES);
-	    P.mixer.mix(pos,voc.wav[note],offset,num);
-	    pos += AudMixer.BUFFER_SIZE_FRAMES;
-	    offset += num;
-	}
-	*/
     }
 
     static void playDrumWav(Voice voc, int vel)
@@ -581,6 +516,41 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
             channel.noteOff(note);
         }
     }
+
+    /**
+     * Run at end of global export-world command.
+     * Saves all necessary values for this extension.
+     */
+    public StringBuilder exportWorld() {
+        StringBuilder buffer = new StringBuilder();
+        P.appendValues(buffer);
+        /*for (LogoArray array : arrays.keySet()) {
+            buffer.append
+                    (Dump.csv().encode
+                            (Dump.extensionObject(array, true, true, false)) + "\n");
+        }*/
+        return buffer;
+    }
+
+    public void importWorld(java.util.List<String[]> lines,
+                            org.nlogo.api.ExtensionManager reader,
+                            org.nlogo.api.ImportErrorHandler handler)
+            throws ExtensionException {
+        P.extractValues(lines);
+
+    }
+
+    /*public org.nlogo.core.ExtensionObject readExtensionObject(org.nlogo.api.ExtensionManager reader,
+                                                              String typeName, String value)
+            throws org.nlogo.api.ExtensionException, CompilerException {
+        String[] s = value.split(P.DELIM);
+        long id = Long.parseLong(s[0]);
+
+        if (s.length > 1) {
+            reader.readFromString(s[1] );
+        }
+        return s[0];
+    }*/
 
 }
 

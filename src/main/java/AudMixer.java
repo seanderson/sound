@@ -29,7 +29,7 @@ import javax.sound.sampled.SourceDataLine;
 public class AudMixer {
     private AudioFormat format;
     private static final int CHANNELS = 1; // must be mono so far
-    public static final int BUFFER_SIZE_FRAMES = 4800;
+    public static final int BUFFER_SIZE_FRAMES = 2400; //4800;
     public static final int SAMPLE_RATE = 44100;
     public static final int NBITS = 16; // Assume 16 bit input (little endian)
     

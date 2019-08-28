@@ -57,7 +57,7 @@ public class Play implements Command {
     }
 
     // Play note for voice id.
-    // SoundExension.playNote is in terms of msec,
+    // SoundExtension.playNote is in terms of msec,
     // but v.dur is in minimal note unit.
     // playWav ignores v.dur and plays out the entire wav.
     public static void playnote(int vid, int noteidx)
@@ -78,14 +78,12 @@ public class Play implements Command {
     public static void playdrumnote(Voice voc, double pcolor)
             throws ExtensionException {
         // brightness encodes velocity
-
-
             if (voc.isMidi()) {
-                int vel = (int) (127 * ((pcolor - P.RCOLOR) / 9.0));
+                int vel = (int) ((127 * (((int)pcolor) % 10)) / 9.0);
                 SoundExtension.playDrum(voc.instrument, vel);
             }
             else {
-                int vel = (int) (10 * ((pcolor - P.RCOLOR) / 9.0));
+                int vel = (int)pcolor % 10;
                 SoundExtension.playDrumWav(voc, vel);
             }
         }
