@@ -2,10 +2,15 @@ extensions [ sound ]
 
 to init
   clear-all
-  sound:init
+  sound:init 4
   sound:set-parameter "BPM" bpm
   set-rhythm
-  set-voices
+  ;set-voices
+  ;
+end
+
+to doit2
+  sound:set-parameter "PATCHSIZE" 8
 end
 
 to set-voices
@@ -24,12 +29,12 @@ to set-voices
 end
 
 to set-rhythm
-  ;;                  "1---2---3---4---"
-  sound:rhythm 0  4 4 "4-------1-------"
-  sound:rhythm 5  4 4 "----4-------4---"
-  sound:rhythm 9  4 4 "0223222302240240"
-  sound:rhythm 14 4 4 "-----5-------6--"
-  sound:set-drum-waveform 0 "wav" "click"
+  ;;               "1---2---3---4---"
+  sound:rhythm 0   "8-------4-------"
+  sound:rhythm 5   "----3-------8---"
+  sound:rhythm 9   "-46444604446046-" ;223222302240240"
+  sound:rhythm 14  "-----5-------6--"
+  ;sound:set-drum-waveform 0 "wav" "click"
 end
 
 to go
@@ -166,11 +171,11 @@ end
 GRAPHICS-WINDOW
 122
 10
-578
-586
+642
+667
 -1
 -1
-7.0
+8.0
 1
 10
 1
@@ -250,7 +255,7 @@ bpm
 bpm
 1
 200
-120.0
+89.0
 1
 1
 NIL
@@ -319,10 +324,10 @@ TEXTBOX
 610
 517
 760
-535
+536
 Rhythm
-14
-25.0
+16
+125.0
 1
 
 TEXTBOX
