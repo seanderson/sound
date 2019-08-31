@@ -72,7 +72,7 @@ public class Init implements Command {
      * drawing sits above world, below turtles
      */
 
-    private static void initDrawing(World w, ExtensionContext context) {
+    static void initDrawing(World w, ExtensionContext context) {
         int alpha = 100;
         java.awt.Color white_trans = new java.awt.Color(255, 255, 255, alpha);
         java.awt.Color gray_trans = new java.awt.Color(100, 100, 100, alpha);
@@ -121,15 +121,17 @@ public class Init implements Command {
     /**
      * Add agents: one for each drummer type and one for each voice.
      */
-    private void addAgents(World w) throws ExtensionException {
+    private static void addAgents(World w) throws ExtensionException {
         int tonic = 36;
         P.drums = new Voice[P.NDRUMS];
         P.voices = new Voice[P.NVOICES];
         double x = -1;
         double y = 0.0; //patch center at 0.0
         int size = 1;
+
         // assign drums
         for (int i = 0; i < P.NDRUMS; i++, y += 1.0) {
+
             P.drums[i] = new Voice(w, SoundExtension.getDrum(P.DEFAULT_DRUMS[i]),
                     P.dcolor[i], x, y, size,
                     tonic, Scale.PENTATONIC);
@@ -138,12 +140,39 @@ public class Init implements Command {
         y += (P.PATCHESPERVOICE / 2);
         size = P.PATCHESPERVOICE;
         for (int i = 0; i < P.NVOICES; i++, y += P.PATCHESPERVOICE) {
+
             P.voices[i] = new Voice(w,
                     SoundExtension.getInstrument(P.DEFAULT_INSTRUMENTS[i]),
                     P.vcolor[i], x, y, size,
                     tonic, Scale.PENTATONIC);
             tonic += 12;
         }
+    }
+
+    /*
+       If agents exist already, probably after an importWorld, just
+       attach agents to already created voices.  Reload waves if necessary.
+
+     */
+    public static void attachAgents(World w) throws ExtensionException {
+
+
+        // assign drums
+        for (int i = 0; i < P.NDRUMS; i++) {
+            P.drums[i].agent = w.getTurtle(P.drums[i].agentID);
+            if (!P.drums[i].isMidi()) {
+                P.drums[i].setWaveform(P.drums[i].dir, P.drums[i].wavfile);
+            }
+        }
+        // assign voices
+
+        for (int i = 0; i < P.NVOICES; i++) {
+            P.voices[i].agent = w.getTurtle(P.voices[i].agentID);
+            if (!P.voices[i].isMidi()) {
+                P.voices[i].setWaveform(P.voices[i].dir, P.voices[i].wavfile);
+            }
+        }
+
     }
 
 

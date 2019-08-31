@@ -18,8 +18,8 @@ public class P {
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
     static int NVOICES = 4; // bottom is rhythm (not a voice)
     static int PATCHESPERVOICE = 16; // possible notes
-    static int XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
-    static int YMAX = (NVOICES + 1) * PATCHESPERVOICE;
+    static int XMAX;
+    static int YMAX;
     final static int VELOCITY_MAX = 127;
     static Double PATCHSIZE = new Double(7.0);
     static boolean WRAP = true;
@@ -76,6 +76,7 @@ public class P {
     public P(int nvoices) {
         NVOICES = nvoices;
         PATCHESPERVOICE = 16; // possible notes
+
         XMAX = NMEASURES * MAXNOTESPERMEASURE; // 4 measures
         YMAX = (NVOICES + 1) * PATCHESPERVOICE;
 
@@ -138,6 +139,16 @@ public class P {
         buff.append("\n");*/
     }
 
+    private static void addLong(StringBuilder buff, String id, long num) {
+        buff.append(
+                Dump.csv().encode(id + DELIM + num) + "\n");
+
+        /*buff.append(id);
+        buff.append(DELIM);
+        buff.append(num);
+        buff.append("\n");*/
+    }
+
     private static void addDouble(StringBuilder buff, String id, double num) {
         buff.append(
                 Dump.csv().encode(id + DELIM + num) + "\n");
@@ -158,14 +169,14 @@ public class P {
     }
 
     private static void addArray(StringBuilder buff, String id, int[] num) {
-
+        StringBuilder tmp = new StringBuilder();
         if (num == null) return;
-        buff.append(
-                Dump.csv().encode(id) + "\n");
+        tmp.append(id);
         for (int n : num) {
-            buff.append(
-                    Dump.csv().encode("" + n) + "\n");
+            tmp.append(DELIM + n);
         }
+
+        buff.append(Dump.csv().encode(tmp.toString()) + "\n");
 
     }
 
@@ -183,23 +194,27 @@ public class P {
 
         for (int i = 0; i < NVOICES; i++) {
             addInt(buff, "VOICE", i);
+            addLong(buff, "agentID", voices[i].agentID);
             addInt(buff, "instrument", voices[i].instrument);
             addBoolean(buff, "isMidi", voices[i].isMidi);
             addArray(buff, "notes", voices[i].notes);
             addInt(buff, "duration", voices[i].dur);
             addInt(buff, "velocity", voices[i].vel);
             addInt(buff, "tonic", voices[i].tonic);
+            addString(buff, "type", voices[i].type);
             addString(buff, "dir", voices[i].dir);
             addString(buff, "wavfile", voices[i].wavfile);
         }
         for (int i = 0; i < NDRUMS; i++) {
             addInt(buff, "DRUM", i);
+            addLong(buff, "agentID", drums[i].agentID);
             addInt(buff, "instrument", drums[i].instrument);
             addBoolean(buff, "isMidi", drums[i].isMidi);
             addArray(buff, "notes", drums[i].notes);
             addInt(buff, "duration", drums[i].dur);
             addInt(buff, "velocity", drums[i].vel);
             addInt(buff, "tonic", drums[i].tonic);
+            addString(buff, "type", drums[i].type);
             addString(buff, "dir", drums[i].dir);
             addString(buff, "wavfile", drums[i].wavfile);
         }
@@ -207,8 +222,7 @@ public class P {
     }
 
     /*
-      Append values to sb that permit reconstruction
-      of music world.
+      Get list of values from lines of input.
      */
     public static void extractValues(List<String[]> lines)
             throws ExtensionException {
@@ -218,15 +232,22 @@ public class P {
         for (String[] line : lines) {
             String[] s = line[0].split(DELIM);
             if (s[0].equals("BEATSPERMINUTE")){
+                P.BEATSPERMINUTE = Integer.parseInt(s[1]);
             }
             else if (s[0].equals("NMEASURES")) {
                 P.NMEASURES = Integer.parseInt(s[1]);
             }
             else if (s[0].equals("NDRUMS")) {
                 P.NDRUMS = Integer.parseInt(s[1]);
+                P.drums = new Voice[P.NDRUMS];
+                for (int i = 0; i < P.NDRUMS; i++)
+                    P.drums[i] = new Voice();
             }
             else if (s[0].equals("NVOICES")) {
                 P.NVOICES = Integer.parseInt(s[1]);
+                P.voices = new Voice[P.NVOICES];
+                for (int i = 0; i < P.NVOICES; i++)
+                    P.voices[i] = new Voice();
             }
             else if (s[0].equals("PATCHSIZE")) {
                 P.PATCHSIZE = Double.parseDouble(s[1]);
@@ -238,6 +259,9 @@ public class P {
             else if (s[0].equals("VOICE")) {
                 id = Integer.parseInt(s[1]);
                 v = P.voices[id];
+            }
+            else if (s[0].equals("agentID")) {
+                v.agentID = Long.parseLong(s[1]);
             }
             else if (s[0].equals("instrument")) {
                 v.instrument = Integer.parseInt(s[1]);
@@ -259,6 +283,9 @@ public class P {
             else if (s[0].equals("tonic")) {
                 v.tonic = Integer.parseInt(s[1]);
             }
+            else if (s[0].equals("type")) {
+                v.type = s[1];
+            }
             else if (s[0].equals("dir")) {
                 v.dir = s[1].equals("null") ? null : s[1];
             }
@@ -271,6 +298,8 @@ public class P {
 
 
         }
+        new P(P.NVOICES); // ensure params are coherent
+
 
     }
 }

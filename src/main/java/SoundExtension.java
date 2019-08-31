@@ -97,6 +97,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
         primManager.addPrimitive("play", new Play());
 //        primManager.addPrimitive("save", new Save());
+        primManager.addPrimitive("reinit", new Reinit());
         primManager.addPrimitive("set-scale", new Scale());
         primManager.addPrimitive("set-voice-waveform", new Waveform());
         primManager.addPrimitive("set-voice-instrument", new SetInstrument());
@@ -536,6 +537,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
                             org.nlogo.api.ExtensionManager reader,
                             org.nlogo.api.ImportErrorHandler handler)
             throws ExtensionException {
+        // get+set various constants
         P.extractValues(lines);
 
     }

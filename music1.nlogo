@@ -5,7 +5,7 @@ to init
   sound:init 4
   sound:set-parameter "BPM" bpm
   set-rhythm
-  ;set-voices
+  set-voices
   ;
 end
 
@@ -15,17 +15,17 @@ end
 
 to set-voices
   sound:set-voice-instrument 0 "CELLO"
-  sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
-  sound:set-voice-waveform 2 "wav" "meow"
+  sound:set-voice-instrument 2 "ACOUSTIC GRAND PIANO"
+  sound:set-voice-waveform 1 "wav" "lla"
   sound:set-voice-instrument 3 "FLUTE"
   sound:set-voice-duration 0 16
-  sound:set-voice-duration 1 8
+  sound:set-voice-duration 2 8
   sound:set-voice-duration 3 2
 
-  sound:set-scale 0 40 "MAJOR 7"
-  sound:set-scale 1 52 "MAJOR 7"
-  sound:set-scale 2 64 "MAJOR 7"
-  sound:set-scale 3 76 "MAJOR 7"
+  sound:set-scale 0 38 "MAJOR 7"
+  sound:set-scale 1 40 "MAJOR 7"
+  sound:set-scale 2 52 "MAJOR 7"
+  sound:set-scale 3 64 "MAJOR 7"
 end
 
 to set-rhythm
@@ -171,11 +171,11 @@ end
 GRAPHICS-WINDOW
 122
 10
-642
-667
+578
+586
 -1
 -1
-8.0
+7.0
 1
 10
 1
@@ -470,6 +470,23 @@ BUTTON
 NIL
 playloop 16 48
 T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+10
+50
+79
+83
+reinit
+sound:reinit
+NIL
 1
 T
 OBSERVER

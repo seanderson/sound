@@ -17,20 +17,33 @@ import java.nio.ByteOrder;
 
 public class Voice {
     Turtle agent; // a turtle
+    long agentID;
     int instrument; // index in SoundExtension.INSTRUMENT_NAMES
-    int[] notes; // set of notes for this instrument.  Lowest is tonic.
     boolean isMidi = true;
+    int[] notes; // set of notes for this instrument.  Lowest is tonic.
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
     int dur = 1; // duration of note (in terms of smallest note dur.)
     int vel = 100; // velocity
     int tonic = 48;
-    String type;
+    String type = Scale.PENTATONIC;
     String dir; // wavfile's directory relative to model
     String wavfile;
+    public static final int NOT_INITIALIZED = -1;
 
+    /*
+      Default constructor used during reinit.  Voice fields MUST be
+      filled in later.
+     */
+    public Voice() {
+        this.agentID = NOT_INITIALIZED; // signals unset
+        wav = new short[P.PATCHESPERVOICE][];
+        notes = new int[P.PATCHESPERVOICE];
+
+    }
     /**
-     * Create a new voice corresponds to one turtle.
+     * Create a new voice corresponding to one turtle.
+     *
      */
     public Voice(World w, int instr, Double color,
                  double x, double y, int size,
@@ -43,6 +56,8 @@ public class Voice {
         setScale(tonic, this.type);
         AgentSet breed = w.turtles();
         agent = w.createTurtle(breed, 1, 0); //color.intValue(),0);
+        agentID = agent.id();
+
         this.instrument = instr;
         try {
             agent.xandycor(x, y);
@@ -82,17 +97,24 @@ public class Voice {
 
     /**
      * Set up all notes for voice, based on tonic and scale name.
+     * If based on wav, will force reload of wav files.
      */
-    public void setScale(int tonic, String name)
+    public void setScale(int thetonic, String name)
             throws ExtensionException {
-        if (tonic < 20 || tonic > 108) return; // hard limits
+
+        if (thetonic < 20 || thetonic > 108) return; // hard limits
+        this.tonic = thetonic;
+        this.type = name;
         int[] master_scale = Scale.getScale(name);
         for (int i = 0; i < P.PATCHESPERVOICE; i++) {
             // Shift scale up one octave
             if (i % master_scale.length == 0 && i != 0) {
-                tonic += 12;
+                thetonic += 12;
             }
-            this.notes[i] = tonic + master_scale[(i % master_scale.length)];
+            this.notes[i] = thetonic + master_scale[(i % master_scale.length)];
+        }
+        if (!isMidi()) {
+            setWaveform(this.dir,this.wavfile);
         }
     }
 
