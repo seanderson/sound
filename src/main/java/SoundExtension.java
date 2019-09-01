@@ -96,7 +96,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("paint-melody", new PaintMelody());
         primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
         primManager.addPrimitive("play", new Play());
-//        primManager.addPrimitive("save", new Save());
+        primManager.addPrimitive("import", new Import());
         primManager.addPrimitive("reinit", new Reinit());
         primManager.addPrimitive("set-scale", new Scale());
         primManager.addPrimitive("set-voice-waveform", new Waveform());
@@ -106,6 +106,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("set-drum-waveform", new DrumWaveform());
         primManager.addPrimitive("delete-voice", new DeleteVoice());
         primManager.addPrimitive("copy-voice", new CopyVoice());
+        primManager.addPrimitive("add-measures", new AddMeasures());
         primManager.addPrimitive("load-midi", new LoadMidi());
         primManager.addPrimitive("set-time", new SetTime());
         primManager.addPrimitive("set-parameter", new SetParams());
@@ -542,17 +543,6 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
     }
 
-    /*public org.nlogo.core.ExtensionObject readExtensionObject(org.nlogo.api.ExtensionManager reader,
-                                                              String typeName, String value)
-            throws org.nlogo.api.ExtensionException, CompilerException {
-        String[] s = value.split(P.DELIM);
-        long id = Long.parseLong(s[0]);
-
-        if (s.length > 1) {
-            reader.readFromString(s[1] );
-        }
-        return s[0];
-    }*/
 
 }
 

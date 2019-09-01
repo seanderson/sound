@@ -169,10 +169,10 @@ sound:play-drum  "OPEN TRIANGLE" 64
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-122
-10
-578
-586
+232
+11
+688
+587
 -1
 -1
 7.0
@@ -279,10 +279,10 @@ NIL
 1
 
 SLIDER
-123
-596
-579
-629
+233
+597
+689
+630
 time
 time
 -1
@@ -294,10 +294,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-4
-428
-92
-461
+136
+597
+224
+630
 setTime
 sound:set-time time
 NIL
@@ -311,60 +311,60 @@ NIL
 1
 
 TEXTBOX
-602
-45
-752
-63
+150
+37
+300
+55
 Voice 3
 14
 114.0
 1
 
 TEXTBOX
-610
-517
-760
-536
+158
+509
+308
+528
 Rhythm
 16
 125.0
 1
 
 TEXTBOX
-609
-382
-759
-400
+157
+374
+307
+392
 Voice 0
 14
 114.0
 1
 
 TEXTBOX
-603
-171
-753
-189
+151
+163
+301
+181
 Voice 2
 14
 114.0
 1
 
 TEXTBOX
-606
-274
-756
-292
+154
+266
+304
+284
 Voice 1
 14
 114.0
 1
 
 BUTTON
-602
-70
-665
-103
+150
+62
+213
+95
 del
 sound:delete-voice 3 0 3
 NIL
@@ -378,10 +378,10 @@ NIL
 1
 
 BUTTON
-604
-191
-667
-224
+152
+183
+215
+216
 del
 sound:delete-voice 2 0 3
 NIL
@@ -395,10 +395,10 @@ NIL
 1
 
 BUTTON
-605
-293
-668
-326
+153
+285
+216
+318
 del
 sound:delete-voice 1 0 3
 NIL
@@ -412,10 +412,10 @@ NIL
 1
 
 BUTTON
-609
-401
-672
-434
+157
+393
+220
+426
 del
 sound:delete-voice 0 0 3
 NIL
@@ -429,52 +429,18 @@ NIL
 1
 
 BUTTON
-29
-487
-99
-520
-NIL
-test1
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-29
-534
-99
-567
-NIL
-test2
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
 9
 264
-156
+72
 297
-NIL
+loop
 playloop 16 48
 T
 1
 T
 OBSERVER
 NIL
-NIL
+L
 NIL
 NIL
 1

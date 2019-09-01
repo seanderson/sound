@@ -29,7 +29,7 @@ public class Reinit implements Command {
         World w = ws.world();
 
         // init the drawing
-        Init.initDrawing(w,ec);
+        //Init.initDrawing(w,ec);
         Init.attachAgents(w);
 
 

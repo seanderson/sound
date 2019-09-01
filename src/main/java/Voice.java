@@ -256,6 +256,23 @@ public class Voice {
         }
     }
 
+    /** Use agent info to create and place new agent */
+    public void resetAgent(World w, double x, double y)
+            throws ExtensionException {
+        AgentSet breed = w.turtles();
+        agent = w.createTurtle(breed, 1, 0); //color.intValue(),0);
+        agentID = agent.id();
+        int size = P.PATCHESPERVOICE;
+        try {
+            agent.xandycor(x, y);
+            agent.heading(0.0);
+            agent.shape("line");
+            agent.size(size);
+        } catch (org.nlogo.api.AgentException ex) {
+            throw new org.nlogo.api.ExtensionException("Bad agent in Voice."
+                    + ex.getMessage());
+        }
+    }
 
 
 }
