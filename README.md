@@ -1,5 +1,5 @@
 
-# NetLogo Sound extension
+# NetLogo Sound extension **Original Version from NetLogo 6.1**
 
 This package contains the NetLogo sound extension.
 
