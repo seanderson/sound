@@ -1,12 +1,12 @@
 extensions [ sound ]
 
+;; Set up a basic music system with four voices and rhythm
 to init
   clear-all
   sound:init 4
   sound:set-parameter "BPM" bpm
   set-rhythm
   set-voices
-  ;
 end
 
 to doit2
@@ -15,11 +15,12 @@ end
 
 to set-voices
   sound:set-voice-instrument 0 "CELLO"
+  sound:set-voice-instrument 1 "BARITONE SAX"
   sound:set-voice-instrument 2 "ACOUSTIC GRAND PIANO"
-  sound:set-voice-waveform 1 "wav" "lla"
   sound:set-voice-instrument 3 "FLUTE"
   sound:set-voice-duration 0 16
-  sound:set-voice-duration 2 8
+  sound:set-voice-duration 1 4
+  sound:set-voice-duration 2 4
   sound:set-voice-duration 3 2
 
   sound:set-scale 0 38 "MAJOR 7"
@@ -47,6 +48,7 @@ to go
   ]
 end
 
+;; Play from a to b
 to playloop [ a b ]
   every 15.0 / bpm [
     sound:play

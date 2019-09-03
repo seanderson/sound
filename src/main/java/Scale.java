@@ -52,9 +52,10 @@ public class Scale implements Command {
   public Syntax getSyntax() {
       // set-scale VOICEID TONIC SCALENAME
       // Assumes TONIC is lowest midi value.
-      return SyntaxJ.commandSyntax( new int[] { Syntax.NumberType(),
-						Syntax.NumberType(),
-						Syntax.StringType() }
+      return SyntaxJ.commandSyntax( new int[] {
+			  Syntax.NumberType(),
+			  Syntax.NumberType(),
+			  Syntax.StringType() }
 	  );
   }
 

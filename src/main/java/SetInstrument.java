@@ -19,7 +19,7 @@ import org.nlogo.agent.Patch;
 */
 public class SetInstrument implements Command {
     
-    // set-voice-instrument VOICEID INST-STRING
+    // set-voice-instrument VOICEID NST-STRING
   public Syntax getSyntax() {
       return SyntaxJ.commandSyntax( new int[] {
 	      Syntax.NumberType(),
