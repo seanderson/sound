@@ -15,7 +15,7 @@ end
 
 to set-voices
   sound:set-voice-instrument 0 "CELLO"
-  sound:set-voice-instrument 1 "BARITONE SAX"
+  sound:set-voice-instrument 1 "ALTO SAX"
   sound:set-voice-instrument 2 "ACOUSTIC GRAND PIANO"
   sound:set-voice-instrument 3 "FLUTE"
   sound:set-voice-duration 0 16
@@ -23,10 +23,10 @@ to set-voices
   sound:set-voice-duration 2 4
   sound:set-voice-duration 3 2
 
-  sound:set-scale 0 38 "MAJOR 7"
-  sound:set-scale 1 40 "MAJOR 7"
-  sound:set-scale 2 52 "MAJOR 7"
-  sound:set-scale 3 64 "MAJOR 7"
+  sound:set-scale 0 30 "MAJOR 7"
+  sound:set-scale 1 30 "MAJOR 7"
+  sound:set-scale 2 42 "MAJOR 7"
+  sound:set-scale 3 54 "MAJOR 7"
 end
 
 to set-rhythm
@@ -436,7 +436,7 @@ BUTTON
 72
 297
 loop
-playloop 16 48
+playloop -1 32
 T
 1
 T
