@@ -1,6 +1,6 @@
 package org.nlogo.extensions.sound;
 
-import org.nlogo.agent.AgentSet;
+
 import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
@@ -18,7 +18,7 @@ public class AddMeasures implements Command {
 
 
     public Syntax getSyntax() {
-        // Add N measures to existing world.
+        /** Add N measures to existing world. */
         return SyntaxJ.commandSyntax(new int[]{Syntax.NumberType()
 
                 }
@@ -57,7 +57,7 @@ public class AddMeasures implements Command {
         P.NMEASURES = P.NMEASURES + num;
         P.XMAX = P.NMEASURES * P.MAXNOTESPERMEASURE;
 
-
+        // Must re-dimension the world to include new patches.
         ws.setDimensions(new WorldDimensions3D(0, P.XMAX - 1, 0,
                         P.YMAX, 0, 1,
                         P.PATCHSIZE,
@@ -70,6 +70,7 @@ public class AddMeasures implements Command {
         fixPatches(w,patchlist);
     }
 
+    /* Save list of colorized patches. */
     ArrayList<PatchInfo> savePatches(World w)
                 throws ExtensionException {
         int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
@@ -90,6 +91,7 @@ public class AddMeasures implements Command {
         return patches;
     }
 
+    // Use ArrayList to restore patch colors to previous values.
     void fixPatches(World w,ArrayList<PatchInfo> patches)
             throws ExtensionException {
 
