@@ -6,7 +6,7 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.agent.World;
-import java.io.IOException;
+
 import org.nlogo.nvm.Workspace;
 
 /**

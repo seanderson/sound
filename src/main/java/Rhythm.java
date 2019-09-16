@@ -4,22 +4,15 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
-// SEA
-import org.nlogo.api.Color;
-//import java.awt.Color;
+
 import org.nlogo.nvm.Workspace;
 import org.nlogo.nvm.ExtensionContext;
-import org.nlogo.api.WorldResizer;
-//import org.nlogo.api.Patch;
 import org.nlogo.agent.World;
 import org.nlogo.agent.Patch;
-//import java.awt.image.BufferedImage;
-//import java.awt.Graphics2D;
-//import java.awt.BasicStroke;
 
 
 /**
- * Initialize world for voices, one lick.
+ * Create one measure of rhthym for one drum voice.
  */
 public class Rhythm implements Command {
 
@@ -27,8 +20,6 @@ public class Rhythm implements Command {
     // string of 16 chars "9-------4-------" defines 16 beat rhythm
     public Syntax getSyntax() {
         return SyntaxJ.commandSyntax(new int[]{
-                //Syntax.NumberType(),
-                //Syntax.NumberType(),
                 Syntax.NumberType(),
                 Syntax.StringType()}
         );
@@ -42,8 +33,6 @@ public class Rhythm implements Command {
         String pttn;
         try {
             voice = args[0].getIntValue();
-            //nbeats = args[1].getIntValue();
-            //basebeat = args[2].getIntValue();
             pttn = args[1].getString();
         } catch (LogoException e) {
             throw new ExtensionException(e.getMessage());

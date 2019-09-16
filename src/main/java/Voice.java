@@ -15,6 +15,10 @@ import javax.sound.sampled.AudioFormat;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * Primary class to model one instrument or drum voice.
+ * Works for midi and wav-based voices.
+ */
 public class Voice {
     Turtle agent; // a turtle
     long agentID;

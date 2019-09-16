@@ -9,7 +9,6 @@ import org.nlogo.api.Context;
 
 import org.nlogo.nvm.Workspace;
 import org.nlogo.nvm.ExtensionContext;
-import org.nlogo.api.WorldResizer;
 
 import org.nlogo.agent.World;
 import org.nlogo.agent.Patch;

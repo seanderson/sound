@@ -4,15 +4,9 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
-// SEA
+
 import org.nlogo.api.Context;
 
-import org.nlogo.nvm.Workspace;
-import org.nlogo.nvm.ExtensionContext;
-import org.nlogo.api.WorldResizer;
-
-import org.nlogo.agent.World;
-import org.nlogo.agent.Patch;
 
 /**
    Set scale/tonic for a voice.

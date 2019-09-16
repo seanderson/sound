@@ -12,7 +12,8 @@ import javax.sound.midi.Sequencer;
 import org.nlogo.api.*;
 
 /**
- * NetLogo command loops a sound file
+ * NetLogo command loops a sound file.
+ * UNUSED!!
  */
 public class LoadMidi implements org.nlogo.api.Reporter {
     public String getAgentClassString() {

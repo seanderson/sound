@@ -7,10 +7,10 @@ import org.nlogo.core.SyntaxJ;
 import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.nvm.Workspace;
 
-import java.io.IOException;
+
 
 /**
- * Reinitialize AFTER haveing imported the world.
+ * Reinitialize AFTER having imported the world.
  */
 public class Reinit implements Command {
 
