@@ -23,18 +23,20 @@ to set-voices
   sound:set-voice-duration 2 4
   sound:set-voice-duration 3 2
 
+
   sound:set-scale 0 30 "MAJOR 7"
   sound:set-scale 1 30 "MAJOR 7"
   sound:set-scale 2 42 "MAJOR 7"
-  sound:set-scale 3 54 "MAJOR 7"
+  sound:set-scale 3 42 "MINOR 7"
+  sound:set-voice-waveform 3 "wav" "lla"
 end
 
 to set-rhythm
   ;;               "1---2---3---4---"
-  sound:rhythm 0   "8-------4-------"
-  sound:rhythm 5   "----3-------8---"
-  sound:rhythm 9   "-46444604446046-" ;223222302240240"
-  sound:rhythm 14  "-----5-------6--"
+  sound:rhythm 0   "6---------------"
+  sound:rhythm 12   "----6-------4---"
+  ;sound:rhythm 9   "-46444604446046-" ;223222302240240"
+  ;sound:rhythm 14  "-----5-------6--"
   ;sound:set-drum-waveform 0 "wav" "click"
 end
 
@@ -471,9 +473,9 @@ SLIDER
 468
 loop-begin
 loop-begin
-0
+-1
 64
-32.0
+15.0
 16
 1
 NIL
