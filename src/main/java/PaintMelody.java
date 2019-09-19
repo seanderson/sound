@@ -57,7 +57,10 @@ public class PaintMelody implements Command {
                         }
                         // color this patch
                         p.setPatchVariable(pcoloridx, P.vcolor[voc]);
-                        Play.playnote(voc, (int) y % P.PATCHESPERVOICE);
+
+                        Play.playnote(voc,
+                                new Note (P.voices[voc].note( (int) y % P.PATCHESPERVOICE),
+                                        P.vcolor[voc]) );
                     }
                 }
             }

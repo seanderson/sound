@@ -22,7 +22,7 @@ public class Play implements Command {
     public void perform(Argument args[], Context context)
             throws ExtensionException {
 
-        int note = 60;
+        Note note = null;
         int vel = 100;
 
         ExtensionContext ec = (ExtensionContext) context;
@@ -60,20 +60,21 @@ public class Play implements Command {
     // SoundExtension.playNote is in terms of msec,
     // but v.dur is in minimal note unit.
     // playWav ignores v.dur and plays out the entire wav.
-    public static void playnote(int vid, int noteidx)
+    public static void playnote(int vid, Note note) //int noteidx)
             throws ExtensionException {
         Voice v = P.voices[vid];
-        if (noteidx > -1) {
+        if (note != null) {
             if (v.isMidi())
                 SoundExtension.playNote(v.instrument,
-                        v.note(noteidx),
-                        v.vel,
+                        note.getPitch(),
+                        note.vel(v), // convert voice's velocity for this note
                         v.dur * P.MIN_NOTE_DUR);
             else
-                SoundExtension.playWav(v, noteidx,
+                SoundExtension.playWav(v, note.getPitch(),
                         v.dur);
         }
     }
+
 
     public static void playdrumnote(Voice voc, double pcolor)
             throws ExtensionException {
@@ -95,7 +96,7 @@ public class Play implements Command {
        Return note for colored patch governed by this voice; -1 if
        none found.
      */
-    public static int getNote(World w, int vid) throws AgentException {
+    public static Note getNote(World w, int vid) throws AgentException {
         Patch p = null;
         // Find first patch in range that is not black.
         double x = P.voices[vid].agent.xcor();
@@ -103,10 +104,10 @@ public class Play implements Command {
         for (int i = 0; i < P.PATCHESPERVOICE; i++) {
             p = w.getPatchAt(x, y + i);
             if (!p.pcolor().equals(P.DBLACK)) {
-                return i;
+                return new Note(P.voices[vid].note(i),(Double) p.pcolor());
             }
         }
-        return -1; // no colored patch found
+        return null; // no colored patch found
     }
 
 

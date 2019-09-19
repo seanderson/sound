@@ -11,8 +11,8 @@ import java.util.List;
 public class P {
     static int BEATSPERMINUTE = 80;
     static int BEATSPERMEASURE = 4;
-    final static int SAMPLERATE = 44100; // for wavs
-    final static int SAMPLESIZE = 16; // 16-bit precision for wavs
+    static final int SAMPLERATE = 44100; // for wavs
+    static final int SAMPLESIZE = 16; // 16-bit precision for wavs
     static int NMEASURES = 4; // measures in one lick (pattern)
     static int MAXNOTESPERMEASURE = 16;
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
@@ -20,7 +20,9 @@ public class P {
     static int PATCHESPERVOICE = 16; // possible notes
     static int XMAX;
     static int YMAX;
-    final static int VELOCITY_MAX = 127;
+    static final int VELOCITY_MAX = 127;
+    static final int NUMVOLUMES = 10;
+    static final double DEFAULT_VOLUME = 0.5; // default in Note
     static Double PATCHSIZE = new Double(7.0);
     static boolean WRAP = true;
     static int LINE_THICKNESS = 1; // for drawing over patches
@@ -37,6 +39,9 @@ public class P {
     static Voice[] drums;
     static int MIN_NOTE_DUR = 0; // duration, in msec, of smallest note.
     static final String DELIM = " ";
+
+
+
 
     // For initial drums, low to hi
     static final String[] DEFAULT_DRUMS = {
@@ -89,6 +94,8 @@ public class P {
             tmp = Math.min(tmp, 129);
             dcolor[i] = new Double(tmp++);
         }
+        // Set up various voice colors.
+        // Base colors end in digit 5, so up/down vol changes are possible.
         vcolor = new Double[NVOICES];
         for (int i = 0; i < NVOICES; i++) {
             vcolor[i] = new Double((BASE_VOICE_COLOR + 40 * i) % 140);
