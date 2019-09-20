@@ -5,7 +5,7 @@ to init
   clear-all
   sound:init 4
   sound:set-parameter "BPM" bpm
-  set-rhythm
+  ;set-rhythm
   set-voices
 end
 
@@ -27,6 +27,8 @@ to set-voices
   sound:set-scale 1 30 "MAJOR 7"
   sound:set-scale 2 42 "MAJOR 7"
   sound:set-scale 3 54 "MAJOR 7"
+
+  sound:set-voice-loudness 2 64
 end
 
 to set-rhythm
@@ -57,6 +59,35 @@ to playloop [ a b ]
     ]
   ]
 end
+
+to louder
+
+    ask patch mouse-xcor mouse-ycor [
+      if (pcolor != black) [
+        set pcolor pcolor + 0.1
+      ]
+  ]
+
+end
+
+to softer
+
+    ask patch mouse-xcor mouse-ycor [
+      if (pcolor != black) [
+        set pcolor pcolor - 0.1
+      ]
+  ]
+
+end
+
+to erase
+  if mouse-down? [
+    ask patch mouse-xcor mouse-ycor [
+      set pcolor black
+    ]
+  ]
+end
+
 
 to test1
   sound:copy-voice 1 0 3 0 1 0
@@ -257,7 +288,7 @@ bpm
 bpm
 1
 200
-89.0
+60.0
 1
 1
 NIL
@@ -442,7 +473,7 @@ T
 T
 OBSERVER
 NIL
-L
+X
 NIL
 NIL
 1
@@ -473,7 +504,7 @@ loop-begin
 loop-begin
 0
 64
-32.0
+0.0
 16
 1
 NIL
@@ -488,11 +519,45 @@ loop-end
 loop-end
 0
 64
-48.0
+16.0
 16
 1
 NIL
 HORIZONTAL
+
+BUTTON
+35
+548
+113
+581
+NIL
+louder
+NIL
+1
+T
+OBSERVER
+NIL
+L
+NIL
+NIL
+1
+
+BUTTON
+35
+583
+109
+616
+NIL
+softer
+NIL
+1
+T
+OBSERVER
+NIL
+S
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS THIS?

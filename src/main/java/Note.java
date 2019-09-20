@@ -3,7 +3,9 @@ package org.nlogo.extensions.sound;
 // Represent all info for a single note.
 public class Note {
     private int pitch; // midi note pitch index
-    private int vol; // volume of note (0 to 9, limited by integer values of color)
+    private int vol; // volume of note (0 to 99, limited by integer values of color)
+
+    // e.g., 40 to 49.9 is shades of yellow.
 
     /**
      * Create new Note using midipitch value and
@@ -22,11 +24,7 @@ public class Note {
      * @param midipitch
      * @param pitchcolor
      */
-/*    public Note(int midipitch, int pitchcolor) {
-        pitch = midipitch;
-        vol = color2volume(pitchcolor);
-    }
-    */
+
 
     public int getPitch() {
         return pitch;
@@ -46,13 +44,13 @@ public class Note {
     }
 
     public static int color2volume(Double pitchcolor) {
-        return pitchcolor.intValue() % P.VELOCITY_MAX;
-
+        return ((int) (10 * pitchcolor)) % P.NUMVOLUMES;
     }
-    public static int color2volume(int pitchcolor) {
+    // ones and tenths to yield integer from 0 to 99
+/*    public static int color2volume(int pitchcolor) {
         return pitchcolor % P.VELOCITY_MAX;
 
-    }
+    }*/
 
     /**
      * Converts voice's default velocity by including this note's scale (0-9).
@@ -60,8 +58,13 @@ public class Note {
      * @return NetLogo velocity for sound (0 to 127)
      */
     public int vel(Voice v) {
-        int vdiff = (int) (vol - 10 * P.DEFAULT_VOLUME); // -5 to +5 change relative to default.
-        return (int) ( (v.vel + (P.VELOCITY_MAX - v.vel) * (vdiff/ (P.NUMVOLUMES/2.0))) % P.VELOCITY_MAX);
+        double vdiff = (vol - (P.NUMVOLUMES / 2));
+        if (vdiff > 0) { //make louder
+            return (int) (v.vel + vdiff * (P.VELOCITY_MAX - v.vel) / (P.NUMVOLUMES / 2));
+        } else {
+            return (int) (v.vel + vdiff * (v.vel) / (P.NUMVOLUMES / 2));
+        }
+
     }
 
 

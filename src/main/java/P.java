@@ -21,7 +21,7 @@ public class P {
     static int XMAX;
     static int YMAX;
     static final int VELOCITY_MAX = 127;
-    static final int NUMVOLUMES = 10;
+    static final int NUMVOLUMES = 100;
     static final double DEFAULT_VOLUME = 0.5; // default in Note
     static Double PATCHSIZE = new Double(7.0);
     static boolean WRAP = true;
