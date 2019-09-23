@@ -1,5 +1,6 @@
 package org.nlogo.extensions.sound;
 
+import java.io.InputStream;
 import java.net.URL;
 
 import org.nlogo.api.ExtensionException;
@@ -302,12 +303,11 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
     }
 
 
-
-    /* Start thread to play the wav */
+    /* Play wav of one note in a voice. */
     static void playWav(Voice voc, int note, int dur)
             throws org.nlogo.api.ExtensionException {
         if (voc.wav[note] == null) return;
-        //new PlayWavThread(voc,note).start();
+
 
         long pos = P.mixer.position();
         // Set to play in next buffer, to avoid skipping
@@ -330,7 +330,8 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
     static void playSound(URL url)
             throws org.nlogo.api.ExtensionException {
-        new PlaySoundThread(url).start();
+        //new PlaySoundThread(url).start();
+        playSoundAndWait(url);
     }
 
 
@@ -342,9 +343,10 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
 
     static void playSoundAndWait(URL url)
             throws org.nlogo.api.ExtensionException {
-        java.applet.AudioClip clip =
+        //java.applet.AudioClip clip =
+        currentClip =
                 java.applet.Applet.newAudioClip(url);
-        clip.play();
+        currentClip.play();
     }
 
     static java.applet.AudioClip currentClip = null;

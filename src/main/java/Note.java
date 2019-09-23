@@ -5,6 +5,8 @@ public class Note {
     private int pitch; // midi note pitch index
     private int vol; // volume of note (0 to 99, limited by integer values of color)
 
+
+    private int scalepos;  // position in scale note is used in.
     // e.g., 40 to 49.9 is shades of yellow.
 
     /**
@@ -13,10 +15,10 @@ public class Note {
      * @param midipitch
      * @param pitchcolor
      */
-    public Note(int midipitch, Double pitchcolor) {
+    public Note(int midipitch, Double pitchcolor, int pos) {
         pitch = midipitch;
         vol = color2volume(pitchcolor);
-
+        scalepos = pos;
     }
     /**
      * Create new Note using midipitch value and
@@ -34,6 +36,13 @@ public class Note {
         this.pitch = p;
     }
 
+    public int getScalepos() {
+        return scalepos;
+    }
+
+    public void setScalepos(int scalepos) {
+        this.scalepos = scalepos;
+    }
 
     public int getVol() {
         return vol;

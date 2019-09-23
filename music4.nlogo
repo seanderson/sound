@@ -23,7 +23,10 @@ to set-voices
   sound:set-voice-duration 2 4
   sound:set-voice-duration 3 2
 
-  sound:set-scale 0 30 "PENTATONIC"
+  sound:set-scale 0 42 "PENTATONIC"
+  sound:set-voice-waveform 0 "wav3" "duh"
+
+
   sound:set-scale 1 30 "PENTATONIC"
   sound:set-scale 2 42 "PENTATONIC"
   sound:set-scale 3 54 "PENTATONIC"
@@ -34,17 +37,17 @@ end
 
 to set-rhythm
   ;;               "1---2---3---4---"
-  sound:rhythm 0   "8-------4-------"
-  sound:rhythm 5   "----3-------8---"
-  sound:rhythm 9   "-46444604446046-" ;223222302240240"
-  sound:rhythm 14  "-----5-------6--"
+  sound:rhythm 0   "8-------4-------" 0 4
+  sound:rhythm 5   "----3-------8---" 0 4
+  sound:rhythm 9   "-46444604446046-" 0 4 ;223222302240240"
+  sound:rhythm 14  "-----5-------6--" 0 4
   ;sound:set-drum-waveform 0 "wav" "click"
   sound:set-drum 0 "MARACAS"
 end
 
 to set-rhythm2
   ;;               "1---2---3---4---"
-  sound:rhythm 0   "4---8---4---8---"
+  sound:rhythm 0   "4---8---4---8---" 0 4
 
   ;sound:set-drum-waveform 0 "wav" "click"
   sound:set-drum 0 "MARACAS"
@@ -236,7 +239,7 @@ end
 GRAPHICS-WINDOW
 232
 11
-1136
+688
 587
 -1
 -1
@@ -251,7 +254,7 @@ GRAPHICS-WINDOW
 1
 1
 0
-127
+63
 0
 80
 0

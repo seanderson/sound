@@ -70,7 +70,7 @@ public class Play implements Command {
                         note.vel(v), // convert voice's velocity for this note
                         v.dur * P.MIN_NOTE_DUR);
             else
-                SoundExtension.playWav(v, note.getPitch(),
+                SoundExtension.playWav(v, note.getScalepos(),
                         v.dur);
         }
     }
@@ -104,7 +104,7 @@ public class Play implements Command {
         for (int i = 0; i < P.PATCHESPERVOICE; i++) {
             p = w.getPatchAt(x, y + i);
             if (!p.pcolor().equals(P.DBLACK)) {
-                return new Note(P.voices[vid].note(i),(Double) p.pcolor());
+                return new Note(P.voices[vid].note(i),(Double) p.pcolor(),i);
             }
         }
         return null; // no colored patch found
