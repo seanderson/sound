@@ -4,6 +4,7 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
+import org.nlogo.core.WorldDimensions;
 
 import org.nlogo.nvm.Workspace;
 import org.nlogo.nvm.ExtensionContext;
@@ -46,13 +47,15 @@ public class Init implements Command {
 
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
+        World w = ws.world();
 
-        ws.setDimensions(new WorldDimensions3D(0, P.XMAX - 1, 0,
+        ws.setDimensions(w.getDimensions(), P.PATCHSIZE);
+      /*  ws.setDimensions(new WorldDimensions3D(0, P.XMAX - 1, 0,
                         P.YMAX, 0, 1,
                         P.PATCHSIZE,
                         P.WRAP, P.WRAP, P.WRAP),
-                P.PATCHSIZE);
-        World w = ws.world();
+                P.PATCHSIZE);*/
+        w = ws.world();
         int pcoloridx = getPcolorID(w);
         try {
             for (int x = 0; x < P.XMAX; x++)
@@ -98,7 +101,10 @@ public class Init implements Command {
         // Draw lines at each beat
         g.setColor(gray_trans);
         g.setStroke(new BasicStroke(P.LINE_THICKNESS));
-        int y0 = (int) -P.PATCHSIZE;
+        int y0 = 5;//(int) (P.PATCHSIZE / 2.);
+
+
+
         for (int x = 0; x < xmax;
              x += 4 * P.PATCHSIZE) {
             if ((x / (4 * P.PATCHSIZE)) % 2 == 1) // upbeats 2 and 4
@@ -188,13 +194,19 @@ public class Init implements Command {
         return pcoloridx;
     }
 
+    /**
+     * Resize world using a changed PATCHSIZE.
+     *
+     * @param context
+     * @throws ExtensionException
+     */
 
     public static void resizeWorld(Context context)
             throws ExtensionException {
 
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
-
+        System.out.println("gets to 0");
         ws.setDimensions(new
 
                         WorldDimensions3D(0, P.XMAX - 1, 0,
@@ -204,11 +216,17 @@ public class Init implements Command {
 
                 P.PATCHSIZE);
         World w = ws.world();
+        System.out.println("gets to 1");
+        // w.patchSize(P.PATCHSIZE);
+        //ws.resizeView();  // not in event thread
+        //ws.setDimensions(w.getDimensions(), P.PATCHSIZE);
+        System.out.println("gets to 2");
         int pcoloridx = getPcolorID(w);
 
         initDrawing(w, ec);
-
+        System.out.println("gets to 3");
         updateAgentsPositions(w);
+        System.out.println("gets to 4");
     }
 
 

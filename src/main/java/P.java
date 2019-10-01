@@ -115,8 +115,7 @@ public class P {
     }
 
     /*
-      set global beats per minute.  Must also reset duration of minimum
-      note which is in msec.
+      Set size of world's patches.
     */
     public static void setPatchSize(int size)
             throws ExtensionException {
