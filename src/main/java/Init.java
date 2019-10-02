@@ -87,7 +87,7 @@ public class Init implements Command {
         Graphics2D g = (Graphics2D) drawing.getGraphics();
         int xmax = (int) (P.XMAX * P.PATCHSIZE);
         int ymax = (int) (P.YMAX * P.PATCHSIZE);
-        // clearning here fails
+        // clearing here fails
         // g.setColor(java.awt.Color.BLACK);
         // g.drawRect(0,0,xmax,ymax);
 
@@ -101,8 +101,8 @@ public class Init implements Command {
         // Draw lines at each beat
         g.setColor(gray_trans);
         g.setStroke(new BasicStroke(P.LINE_THICKNESS));
-        int y0 = 5;//(int) (P.PATCHSIZE / 2.);
-
+        int y0 = P.PATCHSIZE.intValue();
+        ymax += y0;
 
 
         for (int x = 0; x < xmax;
@@ -206,6 +206,7 @@ public class Init implements Command {
 
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
+        ws.world().clearDrawing();
         System.out.println("gets to 0");
         ws.setDimensions(new
 
@@ -216,6 +217,7 @@ public class Init implements Command {
 
                 P.PATCHSIZE);
         World w = ws.world();
+        w.clearDrawing();
         System.out.println("gets to 1");
         // w.patchSize(P.PATCHSIZE);
         //ws.resizeView();  // not in event thread
