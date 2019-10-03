@@ -30,6 +30,7 @@ public class SetParams implements Command {
         } else if (param.equals("PATCHSIZE")) {
             P.setPatchSize(args[1].getIntValue());
             Init.resizeWorld(context);
+            Init.initDrawing(context);
         } else {
             throw new ExtensionException("Error in SetParams ");
         }

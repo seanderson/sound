@@ -18,8 +18,8 @@ public class P {
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
     static int NVOICES = 4; // bottom is rhythm (not a voice)
     static int PATCHESPERVOICE = 16; // possible notes
-    static int XMAX;
-    static int YMAX;
+    static int XMAX; // Num patches in xdir
+    static int YMAX; // Num patches in ydir
     static final int VELOCITY_MAX = 127;
     static final int NUMVOLUMES = 100;
     static final double DEFAULT_VOLUME = 0.5; // default in Note

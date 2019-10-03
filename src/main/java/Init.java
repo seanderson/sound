@@ -47,15 +47,11 @@ public class Init implements Command {
 
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
+
+        resizeWorld(ec);
+
         World w = ws.world();
 
-        ws.setDimensions(w.getDimensions(), P.PATCHSIZE);
-      /*  ws.setDimensions(new WorldDimensions3D(0, P.XMAX - 1, 0,
-                        P.YMAX, 0, 1,
-                        P.PATCHSIZE,
-                        P.WRAP, P.WRAP, P.WRAP),
-                P.PATCHSIZE);*/
-        w = ws.world();
         int pcoloridx = getPcolorID(w);
         try {
             for (int x = 0; x < P.XMAX; x++)
@@ -66,7 +62,7 @@ public class Init implements Command {
                     + ex.getMessage());
 
         }
-        initDrawing(w, ec);
+        initDrawing(ec);
         addAgents(w);
     }
 
@@ -75,21 +71,18 @@ public class Init implements Command {
      * drawing sits above world, below turtles
      */
 
-    static void initDrawing(World w, ExtensionContext context) {
+    static void initDrawing(Context context) {
         int alpha = 100;
         java.awt.Color white_trans = new java.awt.Color(255, 255, 255, alpha);
         java.awt.Color gray_trans = new java.awt.Color(100, 100, 100, alpha);
         java.awt.Color gray_verytrans = new java.awt.Color(100, 100, 100, alpha / 2);
 
         context.workspace().clearDrawing();
-        //w.clearDrawing();
+
         java.awt.image.BufferedImage drawing = context.getDrawing();
         Graphics2D g = (Graphics2D) drawing.getGraphics();
         int xmax = (int) (P.XMAX * P.PATCHSIZE);
         int ymax = (int) (P.YMAX * P.PATCHSIZE);
-        // clearing here fails
-        // g.setColor(java.awt.Color.BLACK);
-        // g.drawRect(0,0,xmax,ymax);
 
         // draw voice delimiters
         g.setColor(white_trans);
@@ -195,43 +188,36 @@ public class Init implements Command {
     }
 
     /**
-     * Resize world using a changed PATCHSIZE.
+     * Resize world using current PATCHSIZE.
      *
      * @param context
      * @throws ExtensionException
      */
-
     public static void resizeWorld(Context context)
             throws ExtensionException {
-
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
         ws.clearDrawing();
-        System.out.println("gets to 0");
+
         World w = ws.world();
-        w.patchSize(P.PATCHSIZE);
-        //ws.setDimensions(w.getDimensions()); //, P.PATCHSIZE); //// Never returns from here
-      /*  ws.setDimensions(new
 
-                        WorldDimensions3D(0, P.XMAX - 1, 0,
-                        P.YMAX, 0, 1,
-                        P.PATCHSIZE,
-                        P.WRAP, P.WRAP, P.WRAP),
+        int newMinX = 0;
+        int newMaxX = P.XMAX;
+        int newMinY = 0;
+        int newMaxY =  P.YMAX;
+        ws.waitFor // in event loop
+                (new org.nlogo.api.CommandRunnable() {
+                     public void run() {
+                         ws.setDimensions
+                                 (new org.nlogo.core.WorldDimensions(newMinX, newMaxX,
+                                         newMinY, newMaxY), P.PATCHSIZE);
+                     }
+                 });
 
-                P.PATCHSIZE);*/
-
-
-        System.out.println("gets to 1");
-        // w.patchSize(P.PATCHSIZE);
-        //ws.resizeView();  // not in event thread
-        //ws.setDimensions(w.getDimensions(), P.PATCHSIZE);
-        System.out.println("gets to 2");
         int pcoloridx = getPcolorID(w);
 
-        initDrawing(w, ec);
-        System.out.println("gets to 3");
-        updateAgentsPositions(w);
-        System.out.println("gets to 4");
+        //initDrawing(w, ec);
+        //updateAgentsPositions(w);
     }
 
 

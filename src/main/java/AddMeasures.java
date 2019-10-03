@@ -65,7 +65,7 @@ public class AddMeasures implements Command {
                 P.PATCHSIZE);
         World w = ws.world();
 
-        Init.initDrawing(w, ec);
+        Init.initDrawing(ec);
         fixAgents(w);
         fixPatches(w,patchlist);
     }
