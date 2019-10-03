@@ -81,8 +81,8 @@ public class Init implements Command {
         java.awt.Color gray_trans = new java.awt.Color(100, 100, 100, alpha);
         java.awt.Color gray_verytrans = new java.awt.Color(100, 100, 100, alpha / 2);
 
-
-        w.clearDrawing();
+        context.workspace().clearDrawing();
+        //w.clearDrawing();
         java.awt.image.BufferedImage drawing = context.getDrawing();
         Graphics2D g = (Graphics2D) drawing.getGraphics();
         int xmax = (int) (P.XMAX * P.PATCHSIZE);
@@ -206,18 +206,21 @@ public class Init implements Command {
 
         ExtensionContext ec = (ExtensionContext) context;
         Workspace ws = ec.workspace();
-        ws.world().clearDrawing();
+        ws.clearDrawing();
         System.out.println("gets to 0");
-        ws.setDimensions(new
+        World w = ws.world();
+        w.patchSize(P.PATCHSIZE);
+        //ws.setDimensions(w.getDimensions()); //, P.PATCHSIZE); //// Never returns from here
+      /*  ws.setDimensions(new
 
                         WorldDimensions3D(0, P.XMAX - 1, 0,
                         P.YMAX, 0, 1,
                         P.PATCHSIZE,
                         P.WRAP, P.WRAP, P.WRAP),
 
-                P.PATCHSIZE);
-        World w = ws.world();
-        w.clearDrawing();
+                P.PATCHSIZE);*/
+
+
         System.out.println("gets to 1");
         // w.patchSize(P.PATCHSIZE);
         //ws.resizeView();  // not in event thread
