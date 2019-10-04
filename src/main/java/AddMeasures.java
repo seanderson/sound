@@ -71,7 +71,7 @@ public class AddMeasures implements Command {
     }
 
     /* Save list of colorized patches. */
-    ArrayList<PatchInfo> savePatches(World w)
+    static ArrayList<PatchInfo> savePatches(World w)
                 throws ExtensionException {
         int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
         ArrayList<PatchInfo> patches = new ArrayList<PatchInfo>();
@@ -92,7 +92,7 @@ public class AddMeasures implements Command {
     }
 
     // Use ArrayList to restore patch colors to previous values.
-    void fixPatches(World w,ArrayList<PatchInfo> patches)
+    static void fixPatches(World w,ArrayList<PatchInfo> patches)
             throws ExtensionException {
 
         int pcoloridx = w.patchesOwnIndexOf("PCOLOR");

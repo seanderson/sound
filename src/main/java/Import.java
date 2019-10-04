@@ -9,6 +9,8 @@ import org.nlogo.agent.World;
 
 import org.nlogo.nvm.Workspace;
 
+import java.net.MalformedURLException;
+
 /**
  * Call _import_world to reload data, then reinit to fix up sound extension.
  */
@@ -28,7 +30,36 @@ public class Import implements Command {
         // create a NetLogo list for the result
         String fname;
         World w;
-        Workspace ws;
+        Workspace ws = ec.workspace();
+        String filePath;
+        try {
+            filePath = context.attachCurrentDirectory(args[0].getString());
+        }
+        catch (MalformedURLException ex) {
+            throw new ExtensionException(ex.getMessage());
+        }
+        // Workspace.waitFor() switches to the event thread if we're
+        // running with a GUI.
+        ws.waitFor
+                (new org.nlogo.api.CommandRunnable() {
+                    public void run() throws LogoException {
+                        try {
+                           // ws.importWorld
+                             //       (ws.fileManager().attachPrefix
+                               //             (filePath));
+                            ws.importWorld(filePath);
+                        } catch (java.io.IOException ex) {
+                            //throw new ExtensionException(ex.getMessage());
+
+                        }
+                    }
+                });
+
+
+
+/*
+
+
         try {
 
             fname = context.attachCurrentDirectory(args[0].getString());
@@ -41,6 +72,7 @@ public class Import implements Command {
 
             throw new ExtensionException(iex.getMessage());
         }
+*/
 
         Init.attachAgents(ws.world());
 

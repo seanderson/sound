@@ -199,8 +199,6 @@ public class Init implements Command {
         Workspace ws = ec.workspace();
         ws.clearDrawing();
 
-        World w = ws.world();
-
         int newMinX = 0;
         int newMaxX = P.XMAX;
         int newMinY = 0;
@@ -214,10 +212,7 @@ public class Init implements Command {
                      }
                  });
 
-        int pcoloridx = getPcolorID(w);
 
-        //initDrawing(w, ec);
-        //updateAgentsPositions(w);
     }
 
 
