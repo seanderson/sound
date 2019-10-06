@@ -1,11 +1,11 @@
 extensions [ sound ]
-globals [ rep ]
+
 ;; Set up a basic music system with four voices and rhythm
 to init
   clear-all
-  sound:init 4
+  sound:init 4 ;; 4 voices
   sound:set-parameter "BPM" bpm
-  set-rhythm2
+  set-sync-rhythm
   set-voices
 end
 
@@ -13,45 +13,74 @@ to doit2
   sound:set-parameter "PATCHSIZE" 8
 end
 
+;; Configure voices that we'll use
+;; Lower voices tend to be instruments of lower pitch
+;; with longer duration notes.
 to set-voices
   sound:set-voice-instrument 0 "CELLO"
   sound:set-voice-instrument 1 "ACOUSTIC GRAND PIANO"
   sound:set-voice-instrument 2 "CHOIR"
   sound:set-voice-instrument 3 "SITAR"
+  ;; Configure the durations for each
   sound:set-voice-duration 0 16
   sound:set-voice-duration 1 4
   sound:set-voice-duration 2 4
   sound:set-voice-duration 3 2
-
+  ;; Configure the scales  and ranges each uses
   sound:set-scale 0 42 "PENTATONIC"
   sound:set-voice-waveform 0 "wav3" "duh"
-
-
   sound:set-scale 1 30 "PENTATONIC"
   sound:set-scale 2 42 "PENTATONIC"
   sound:set-scale 3 54 "PENTATONIC"
-
+  ;; Set default loudness
   sound:set-voice-loudness 2 64
   sound:set-voice-loudness 3 50
 end
 
-to set-rhythm
+;; busy maracas
+to set-rhythm1
   ;;               "1---2---3---4---"
   sound:rhythm 0   "8-------4-------" 0 4
   sound:rhythm 5   "----3-------8---" 0 4
   sound:rhythm 9   "-46444604446046-" 0 4 ;223222302240240"
   sound:rhythm 14  "-----5-------6--" 0 4
-  ;sound:set-drum-waveform 0 "wav" "click"
+
   sound:set-drum 0 "MARACAS"
 end
 
+;; laid back
 to set-rhythm2
   ;;               "1---2---3---4---"
-  sound:rhythm 0   "4---8---4---8---" 0 4
-
-  ;sound:set-drum-waveform 0 "wav" "click"
-  sound:set-drum 0 "MARACAS"
+  sound:rhythm 0   "4---6---4---6---" 0 4
+  sound:rhythm 1   "---------------1" 0 4
+  sound:rhythm 2   "3---------------" 0 2
+  sound:rhythm 2   "--------2-------" 2 2
+  ;sound:rhythm 3   "1-1-1-1-1-1-1-1-" 0 4
+  ;; Set drum voices
+  sound:set-drum 0 "side stick"
+  sound:set-drum-waveform 1 "wav" "click"
+  sound:set-drum 2 "acoustic bass drum"
+  ;sound:set-drum 3 "maracas"
 end
+
+;; swing rhythm
+to set-sync-rhythm
+  ;;               "1---2---3---4---"
+  sound:rhythm 0   "-6---4-------3--" 0 4
+  sound:rhythm 2   "---------6------" 0 4
+  ;sound:rhythm 2   "3---------------" 0 2
+  ;sound:rhythm 2   "--------2-------" 2 2
+  ;sound:rhythm 3   "1-1-1-1-1-1-1-1-" 0 4
+  ;; Set drum voices
+  ;sound:set-drum 0 "side stick"
+  ;sound:set-drum-waveform 1 "wav" "click"
+  sound:set-drum 0 "acoustic bass drum"
+  sound:set-drum 2 "open hi hat"
+  ;sound:set-drum 3 "maracas"
+
+end
+
+
 
 to go
   ;; there are 4 patches per "beat" (and four beats to a measure)
@@ -94,9 +123,8 @@ to playsong
 
 end
 
-
+;; Increase Loudness by making color brighter
 to louder
-
     ask patch mouse-xcor mouse-ycor [
       if (pcolor != black) [
         set pcolor pcolor + 0.1
@@ -105,6 +133,7 @@ to louder
 
 end
 
+;; Decrease Loudness by making color dimmer
 to softer
 
     ask patch mouse-xcor mouse-ycor [
@@ -115,6 +144,7 @@ to softer
 
 end
 
+;; Erase notes
 to erase
   if mouse-down? [
     ask patch mouse-xcor mouse-ycor [
@@ -123,123 +153,16 @@ to erase
   ]
 end
 
-
-to test1
-  sound:copy-voice 1 0 3 0 1 0
-  sound:copy-voice 1 0 3 2 1 0
-  sound:copy-voice 1 0 3 1 1 -3
-  sound:copy-voice 1 0 1 2 1 4
-  sound:copy-voice 1 0 3 3 1 0
-end
-
-to test2
-  sound:copy-voice 1 2 2 2 2 3
-
-end
-
-
-to doit
-sound:play-drum "ACOUSTIC BASS DRUM" 64
-wait 1.5
-sound:play-drum  "BASS DRUM 1" 64
-wait 1.5
-sound:play-drum  "SIDE STICK" 64
-wait 1.5
-sound:play-drum  "ACOUSTIC SNARE" 64
-wait 1.5
-sound:play-drum  "HAND CLAP" 64
-wait 1.5
-sound:play-drum  "ELECTRIC SNARE" 64
-wait 1.5
-sound:play-drum  "LOW FLOOR TOM" 64
-wait 1.5
-sound:play-drum  "CLOSED HI HAT" 64
-wait 1.5
-sound:play-drum  "HI FLOOR TOM" 64
-wait 1.5
-sound:play-drum  "PEDAL HI HAT" 64
-wait 1.5
-sound:play-drum  "LOW TOM" 64
-wait 1.5
-sound:play-drum  "OPEN HI HAT" 64
-wait 1.5
-sound:play-drum  "LOW MID TOM" 64
-wait 1.5
-sound:play-drum  "HI MID TOM" 64
-wait 1.5
-sound:play-drum  "CRASH CYMBAL 1" 64
-wait 1.5
-sound:play-drum  "HI TOM" 64
-wait 1.5
-sound:play-drum  "RIDE CYMBAL 1" 64
-wait 1.5
-sound:play-drum  "CHINESE CYMBAL" 64
-wait 1.5
-sound:play-drum  "RIDE BELL" 64
-wait 1.5
-sound:play-drum  "TAMBOURINE" 64
-wait 1.5
-sound:play-drum  "SPLASH CYMBAL" 64
-wait 1.5
-sound:play-drum  "COWBELL" 64
-wait 1.5
-sound:play-drum  "CRASH CYMBAL 2" 64
-wait 1.5
-sound:play-drum  "VIBRASLAP" 64
-wait 1.5
-sound:play-drum  "RIDE CYMBAL 2" 64
-wait 1.5
-sound:play-drum  "HI BONGO" 64
-wait 1.5
-sound:play-drum  "LOW BONGO" 64
-wait 1.5
-sound:play-drum  "MUTE HI CONGA" 64
-wait 1.5
-sound:play-drum  "OPEN HI CONGA" 64
-wait 1.5
-sound:play-drum  "LOW CONGA" 64
-wait 1.5
-sound:play-drum  "HI TIMBALE" 64
-wait 1.5
-sound:play-drum  "LOW TIMBALE" 64
-wait 1.5
-sound:play-drum  "HI AGOGO" 64
-wait 1.5
-sound:play-drum  "LOW AGOGO" 64
-wait 1.5
-sound:play-drum  "CABASA" 64
-wait 1.5
-sound:play-drum  "MARACAS" 64
-wait 1.5
-sound:play-drum  "SHORT WHISTLE" 64
-wait 1.5
-sound:play-drum  "LONG WHISTLE" 64
-wait 1.5
-sound:play-drum  "SHORT GUIRO" 64
-wait 1.5
-sound:play-drum  "LONG GUIRO" 64
-wait 1.5
-sound:play-drum  "CLAVES" 64
-wait 1.5
-sound:play-drum  "HI WOOD BLOCK" 64
-wait 1.5
-sound:play-drum  "LOW WOOD BLOCK" 64
-wait 1.5
-sound:play-drum  "MUTE CUICA" 64
-wait 1.5
-sound:play-drum   "OPEN CUICA" 64
-wait 1.5
-sound:play-drum  "MUTE TRIANGLE" 64
-wait 1.5
-sound:play-drum  "OPEN TRIANGLE" 64
-
-
+to import-score
+  clear-all
+  sound:init 4
+  sound:import import-file
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 232
 11
-688
+695
 587
 -1
 -1
@@ -254,7 +177,7 @@ GRAPHICS-WINDOW
 1
 1
 0
-63
+64
 0
 80
 0
@@ -281,10 +204,10 @@ NIL
 1
 
 BUTTON
-13
-96
-95
-129
+9
+60
+91
+93
 melody
 sound:paint-melody
 T
@@ -298,10 +221,10 @@ NIL
 1
 
 BUTTON
-8
-215
-71
-248
+13
+149
+76
+182
 go
 go
 T
@@ -315,25 +238,25 @@ NIL
 1
 
 SLIDER
-4
-323
-96
-356
+17
+345
+157
+378
 bpm
 bpm
 1
 200
-117.0
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-14
-132
-92
-165
+10
+96
+88
+129
 delete
 sound:unpaint-melody
 T
@@ -347,25 +270,25 @@ NIL
 1
 
 SLIDER
-233
-597
-689
-630
+234
+601
+690
+634
 time
 time
 -1
 max-pxcor
-1.0
+-1.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-136
-597
-224
-630
+137
+601
+225
+634
 setTime
 sound:set-time time
 NIL
@@ -389,20 +312,20 @@ Voice 3
 1
 
 TEXTBOX
-158
-509
-308
-528
+157
+529
+307
+548
 Rhythm
 16
 125.0
 1
 
 TEXTBOX
-157
-374
-307
-392
+158
+384
+308
+402
 Voice 0
 14
 114.0
@@ -419,10 +342,10 @@ Voice 2
 1
 
 TEXTBOX
-154
-266
-304
-284
+156
+276
+306
+294
 Voice 1
 14
 114.0
@@ -463,10 +386,10 @@ NIL
 1
 
 BUTTON
-153
-285
-216
-318
+155
+295
+218
+328
 del
 sound:delete-voice 1 0 3
 NIL
@@ -480,10 +403,10 @@ NIL
 1
 
 BUTTON
-157
-393
-220
-426
+158
+403
+221
+436
 del
 sound:delete-voice 0 0 3
 NIL
@@ -497,10 +420,10 @@ NIL
 1
 
 BUTTON
-23
-393
-86
-426
+18
+412
+81
+445
 loop
 playloop loop-begin loop-end
 T
@@ -513,48 +436,31 @@ NIL
 NIL
 1
 
-BUTTON
-10
-50
-79
-83
-reinit
-sound:reinit
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
 SLIDER
-21
-435
-193
-468
+17
+456
+189
+489
 loop-begin
 loop-begin
--1
+0
 64
-31.0
+0.0
 16
 1
 NIL
 HORIZONTAL
 
 SLIDER
-22
-473
-194
-506
+18
+494
+190
+527
 loop-end
 loop-end
-0
+15
 64
-64.0
+31.0
 16
 1
 NIL
@@ -595,12 +501,39 @@ NIL
 1
 
 BUTTON
-69
-639
-165
-672
+25
+641
+121
+674
 NIL
 playsong
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+CHOOSER
+14
+221
+223
+266
+import-file
+import-file
+"models/fourMeas1.csv" "models/fourMeas2.csv" "models/fourMeas3.csv" "models/fourMeas4.csv" "models/fourMeas5.csv" "models/fourMeas6.csv"
+0
+
+BUTTON
+15
+268
+138
+301
+NIL
+import-score
 NIL
 1
 T

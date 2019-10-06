@@ -91,8 +91,8 @@ public class P {
         mixer = new AudMixer();
         mixer.start();
         for (int i = 0; i < NDRUMS; i++) {
-            tmp = Math.min(tmp, 129);
-            dcolor[i] = new Double(tmp++);
+            //tmp = Math.min(tmp, 129);
+            dcolor[i] = new Double(tmp);
         }
         // Set up various voice colors.
         // Base colors end in digit 5, so up/down vol changes are possible.
