@@ -1,5 +1,7 @@
 package org.nlogo.extensions.sound;
 
+import org.nlogo.agent.AgentSet;
+import org.nlogo.agent.Patch;
 import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.Syntax;
@@ -13,6 +15,7 @@ import org.nlogo.agent.World;
 
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import java.util.ArrayList;
 
 import org.nlogo.api.ExtensionException;
 
@@ -20,6 +23,21 @@ import org.nlogo.api.ExtensionException;
  * Initialize world for voices, one lick.
  */
 public class Init implements Command {
+
+
+    private static ArrayList<PatchInfo> patchlist = null; // for stashing patch info
+
+    private static class PatchInfo {
+        Double pcolor;
+        int x;
+        int y;
+        public PatchInfo(int thex, int they, Double thepcolor) {
+            x = thex;
+            y = they;
+            pcolor = thepcolor;
+        }
+    }
+
     // Init NUM_VOICES
     public Syntax getSyntax() {
         return SyntaxJ.commandSyntax(new int[]{
@@ -57,8 +75,8 @@ public class Init implements Command {
             for (int x = 0; x < P.XMAX; x++)
                 for (int y = 0; y < P.YMAX; y++)
                     w.getPatchAt(x, y).setPatchVariable(pcoloridx, P.DBLACK);
-        } catch (org.nlogo.api.AgentException ex) {
-            throw new org.nlogo.api.ExtensionException("Bad patch in Init."
+        } catch (AgentException ex) {
+            throw new ExtensionException("Bad patch in Init."
                     + ex.getMessage());
 
         }
@@ -120,10 +138,11 @@ public class Init implements Command {
     /**
      * Add agents: one for each drummer type and one for each voice.
      */
-    private static void addAgents(World w) throws ExtensionException {
+    static void addAgents(World w) throws ExtensionException {
         int tonic = 36;
         P.drums = new Voice[P.NDRUMS];
-        P.voices = new Voice[P.NVOICES];
+        P.voices = null;
+        if (P.NVOICES > 0) P.voices = new Voice[P.NVOICES];
         double x = -1;
         double y = 0.0; //patch center at 0.0
         int size = 1;
@@ -148,7 +167,7 @@ public class Init implements Command {
         }
     }
 
-    /*
+    /**
        If agents exist already, probably after an importWorld, just
        attach agents to already created voices.  Reload waves if necessary.
 
@@ -159,15 +178,23 @@ public class Init implements Command {
         // assign drums
         for (int i = 0; i < P.NDRUMS; i++) {
             P.drums[i].agent = w.getTurtle(P.drums[i].agentID);
+            if (P.drums[i].agent == null)  {
+                System.out.println("No drum agent " + i);
+            }
             if (!P.drums[i].isMidi()) {
-                P.drums[i].setWaveform(P.drums[i].dir, P.drums[i].wavfile);
+                System.out.println("drum not midi " + i + " " + P.drums[i].wavfile);
+                P.drums[i].setDrumWaveform(P.drums[i].dir, P.drums[i].wavfile);
             }
         }
         // assign voices
 
         for (int i = 0; i < P.NVOICES; i++) {
             P.voices[i].agent = w.getTurtle(P.voices[i].agentID);
+            if (P.voices[i].agent == null) {
+                System.out.println("No voice agent " + i);
+            }
             if (!P.voices[i].isMidi()) {
+                System.out.println("voice not midi " + i);
                 P.voices[i].setWaveform(P.voices[i].dir, P.voices[i].wavfile);
             }
         }
@@ -185,34 +212,6 @@ public class Init implements Command {
             throw new ExtensionException("patch does not own pcolor");
         }
         return pcoloridx;
-    }
-
-    /**
-     * Resize world using current PATCHSIZE.
-     *
-     * @param context
-     * @throws ExtensionException
-     */
-    public static void resizeWorld(Context context)
-            throws ExtensionException {
-        ExtensionContext ec = (ExtensionContext) context;
-        Workspace ws = ec.workspace();
-        ws.clearDrawing();
-
-        int newMinX = 0;
-        int newMaxX = P.XMAX;
-        int newMinY = 0;
-        int newMaxY =  P.YMAX;
-        ws.waitFor // in event loop
-                (new org.nlogo.api.CommandRunnable() {
-                     public void run() {
-                         ws.setDimensions
-                                 (new org.nlogo.core.WorldDimensions(newMinX, newMaxX,
-                                         newMinY, newMaxY), P.PATCHSIZE);
-                     }
-                 });
-
-
     }
 
 
@@ -244,5 +243,116 @@ public class Init implements Command {
         }
     }
 
-} // end Init class
+
+
+
+    /**
+     * Resize world using current parameters in P (PATCHSIZE, XMAX, YMAX).
+     *
+     * @param context
+     * @throws ExtensionException
+     */
+    public static void resizeWorld(Context context)
+            throws ExtensionException {
+        ExtensionContext ec = (ExtensionContext) context;
+        Workspace ws = ec.workspace();
+        ws.clearDrawing();
+
+        int newMinX = 0;
+        int newMaxX = P.XMAX;
+        int newMinY = 0;
+        int newMaxY =  P.YMAX;
+        ws.waitFor // in event loop
+                (new org.nlogo.api.CommandRunnable() {
+                    public void run() {
+                        ws.setDimensions
+                                (new org.nlogo.core.WorldDimensions(newMinX, newMaxX,
+                                        newMinY, newMaxY), P.PATCHSIZE);
+                    }
+                });
+
+
+    }
+
+    /**
+     * Stash copy of patches for later recovery.
+     * @param w the world
+     */
+    public static void stashPatches(World w) throws ExtensionException {
+        Init.patchlist = savePatches(w);
+    }
+
+    /**
+     * restore last copy of stashed patches saved using stashPatches.
+     * @param w the world
+     */
+    public static void restorePatches(World w) throws ExtensionException {
+        if (Init.patchlist != null) fixPatches(w,Init.patchlist);
+    }
+
+
+
+    /* Save list of colorized patches. */
+    private static ArrayList<PatchInfo> savePatches(World w)
+            throws ExtensionException {
+        int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
+        ArrayList<PatchInfo> patches = new ArrayList<PatchInfo>();
+        try {
+            for (int i = 0; i < P.XMAX; i++) {
+                for (int j = 0; j < P.YMAX; j++) {
+                    org.nlogo.agent.Patch p = w.getPatchAt(i,j);
+                    if (!p.pcolor().equals(P.DBLACK)) {
+                        patches.add(new PatchInfo(i,j,(Double)p.pcolor()));
+                    }
+                }
+            }
+        }
+        catch (AgentException e) {
+            throw new ExtensionException(e.getMessage());
+        }
+        return patches;
+    }
+
+    // Use ArrayList to restore patch colors to previous values.
+    private static void fixPatches(World w,ArrayList<PatchInfo> patches)
+            throws ExtensionException {
+
+        int pcoloridx = w.patchesOwnIndexOf("PCOLOR");
+        try {
+            for (PatchInfo pi : patches) {
+                Patch p = w.getPatchAt(pi.x, pi.y);
+                p.setPatchVariable(pcoloridx, pi.pcolor);
+                //System.out.println("xx " + (Double) (pi.pcolor()));
+            }
+        } catch (AgentException e) {
+            throw new ExtensionException(e.getMessage());
+        }
+    }
+
+    public static void fixAgents(World w)
+            throws ExtensionException {
+        double x = -1;
+        double y = 0.0; //patch center at 0.0
+
+        // create drums
+        for (int i = 0; i < P.NDRUMS; i++, y += 1.0) {
+            P.drums[i].resetAgent(w, x, y);
+        }
+        // assign voices
+        y += (P.PATCHESPERVOICE / 2);
+
+        for (int i = 0; i < P.NVOICES; i++, y += P.PATCHESPERVOICE) {
+
+            P.voices[i].resetAgent(w, x, y);
+        }
+
+    }
+
+
+
+
+
+
+
+    } // end Init class
 

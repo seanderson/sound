@@ -98,7 +98,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("unpaint-melody", new UnPaintMelody());
         primManager.addPrimitive("play", new Play());
         primManager.addPrimitive("import", new Import());
-        primManager.addPrimitive("reinit", new Reinit());
+        //primManager.addPrimitive("reinit", new Reinit());
         primManager.addPrimitive("set-scale", new Scale());
         primManager.addPrimitive("set-voice-waveform", new Waveform());
         primManager.addPrimitive("set-voice-instrument", new SetInstrument());
@@ -108,6 +108,7 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         primManager.addPrimitive("delete-voice", new DeleteVoice());
         primManager.addPrimitive("copy-voice", new CopyVoice());
         primManager.addPrimitive("add-measures", new AddMeasures());
+        //primManager.addPrimitive("add-voices", new AddVoices());
         //primManager.addPrimitive("load-midi", new LoadMidi());
         primManager.addPrimitive("set-time", new SetTime());
         primManager.addPrimitive("set-parameter", new SetParams());

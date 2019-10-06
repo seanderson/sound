@@ -10,9 +10,10 @@ import org.nlogo.agent.World;
 import org.nlogo.nvm.Workspace;
 
 import java.net.MalformedURLException;
+import org.nlogo.nvm.RuntimePrimitiveException;
 
 /**
- * Call _import_world to reload data, then reinit to fix up sound extension.
+ * Call _import_world to reload data.
  */
 public class Import implements Command {
 
@@ -29,8 +30,9 @@ public class Import implements Command {
         ExtensionContext ec = (ExtensionContext) context;
         // create a NetLogo list for the result
         String fname;
-        World w;
+
         Workspace ws = ec.workspace();
+        World w = ws.world();
         String filePath;
         try {
             filePath = context.attachCurrentDirectory(args[0].getString());
@@ -38,45 +40,30 @@ public class Import implements Command {
         catch (MalformedURLException ex) {
             throw new ExtensionException(ex.getMessage());
         }
+
+        Init.stashPatches(w);
         // Workspace.waitFor() switches to the event thread if we're
         // running with a GUI.
         ws.waitFor
                 (new org.nlogo.api.CommandRunnable() {
-                    public void run() throws LogoException {
+                    public void run()  throws RuntimeException {
                         try {
-                           // ws.importWorld
-                             //       (ws.fileManager().attachPrefix
-                               //             (filePath));
                             ws.importWorld(filePath);
                         } catch (java.io.IOException ex) {
-                            //throw new ExtensionException(ex.getMessage());
-
+                            throw new RuntimeException(ex.getMessage());
                         }
                     }
                 });
 
 
 
-/*
-
-
-        try {
-
-            fname = context.attachCurrentDirectory(args[0].getString());
-            ws = ec.workspace();
-            //ws.importWorld(fname);
-            ws.command("import-world " + fname);
-        } catch (LogoException e) {
-            throw new ExtensionException(e.getMessage());
-        } catch (Exception iex) {
-
-            throw new ExtensionException(iex.getMessage());
-        }
-*/
-
-        Init.attachAgents(ws.world());
+        Init.restorePatches(w);
+        Init.attachAgents(w);
 
     }
+
+
+
 
 
 

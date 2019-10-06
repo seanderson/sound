@@ -6,6 +6,8 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 
 import org.nlogo.api.Context;
+import org.nlogo.nvm.ExtensionContext;
+import org.nlogo.agent.World;
 
 import java.util.ArrayList;
 
@@ -30,11 +32,16 @@ public class SetParams implements Command {
         if (param.equals("BPM")) {
             P.setBPM(args[1].getIntValue());
         } else if (param.equals("PATCHSIZE")) {
-            ArrayList<AddMeasures.PatchInfo> patchlist = AddMeasures.savePatches(context.workspace().world());
+
+            ExtensionContext ec = (ExtensionContext) context;
+            org.nlogo.nvm.Workspace ws = ec.workspace();
+            World w = ws.world();
+            Init.stashPatches(w);
             P.setPatchSize(args[1].getIntValue());
             Init.resizeWorld(context);
             Init.initDrawing(context);
-            AddMeasures.fixPatches(contex.workspace().world(),patchlist);
+            Init.attachAgents(w);
+            Init.restorePatches(w);
         } else {
             throw new ExtensionException("Error in SetParams ");
         }

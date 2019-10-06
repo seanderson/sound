@@ -45,6 +45,9 @@ public class Voice {
         notes = new int[P.PATCHESPERVOICE];
 
     }
+
+
+
     /**
      * Create a new voice corresponding to one turtle.
      *
@@ -53,6 +56,8 @@ public class Voice {
                  double x, double y, int size,
                  int tonic, String type)
             throws ExtensionException {
+
+        //System.out.println("adding " + instr + " " + x + " " + y);
         wav = new short[P.PATCHESPERVOICE][];
         notes = new int[P.PATCHESPERVOICE];
         this.tonic = tonic;
@@ -199,6 +204,8 @@ public class Voice {
             throws ExtensionException {
         int PATCHESPERDRUM = 10;  // We create 10 different volumes for a drum waveform!
         isMidi = false;
+        this.dir = dir;
+        this.wavfile = wavfile;
         wav = new short[PATCHESPERDRUM][];
 
         int i = PATCHESPERDRUM / 2;

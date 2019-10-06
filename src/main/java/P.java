@@ -5,6 +5,7 @@ package org.nlogo.extensions.sound;
 
 import org.nlogo.api.Dump;
 import org.nlogo.api.ExtensionException;
+import org.nlogo.agent.World;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class P {
     static int MAXNOTESPERMEASURE = 16;
     static int NDRUMS = MAXNOTESPERMEASURE; // same a num notes for simplicity
     static int NVOICES = 4; // bottom is rhythm (not a voice)
+    public static final int MAXVOICES = 10; // bottom is rhythm (not a voice)
     static int PATCHESPERVOICE = 16; // possible notes
     static int XMAX; // Num patches in xdir
     static int YMAX; // Num patches in ydir
@@ -39,8 +41,6 @@ public class P {
     static Voice[] drums;
     static int MIN_NOTE_DUR = 0; // duration, in msec, of smallest note.
     static final String DELIM = " ";
-
-
 
 
     // For initial drums, low to hi
@@ -96,12 +96,58 @@ public class P {
         }
         // Set up various voice colors.
         // Base colors end in digit 5, so up/down vol changes are possible.
-        vcolor = new Double[NVOICES];
-        for (int i = 0; i < NVOICES; i++) {
+        vcolor = new Double[MAXVOICES];
+        for (int i = 0; i < MAXVOICES; i++) {
             vcolor[i] = new Double((BASE_VOICE_COLOR + 40 * i) % 140);
         }
 
     }
+
+    /**
+     * Add to set of existing voices.
+     *
+     * @param n num to add
+     */
+    static void addvoices(World w, int n) throws ExtensionException {
+        Voice[] newvoices = new Voice[n + P.NVOICES];
+        int i = 0;
+        int tonic = 36;
+        // copy existing voices
+        System.out.println("Curr num voices " + P.NVOICES);
+        if (P.voices != null) {
+            for (; i < P.NVOICES; i++) {
+                newvoices[i] = P.voices[i];
+            }
+        }
+        // create new default voices
+        double x = 0.0;
+        double y = 0.0;
+        if (P.NVOICES > 0) {
+            x = P.voices[P.NVOICES - 1].agent.xcor();
+            y = P.voices[P.NVOICES - 1].agent.ycor();
+        } else {
+            x = P.drums[P.NDRUMS - 1].agent.xcor();
+            y = P.drums[P.NDRUMS - 1].agent.ycor();
+        }
+
+        y += (P.PATCHESPERVOICE / 2);
+        int size = P.PATCHESPERVOICE;
+
+        P.NVOICES += n;
+        P.YMAX = (P.NVOICES + 1) * P.PATCHESPERVOICE;
+        for (; i < P.NVOICES; i++, y += P.PATCHESPERVOICE) {
+
+            newvoices[i] = new Voice(w,
+                    SoundExtension.getInstrument(P.DEFAULT_INSTRUMENTS[i]),
+                    P.vcolor[i], x, y, size,
+                    tonic, Scale.PENTATONIC);
+            tonic += 12;
+        }
+        P.voices = newvoices;
+    }
+
+
+
 
     /*
       set global beats per minute.  Must also reset duration of minimum
