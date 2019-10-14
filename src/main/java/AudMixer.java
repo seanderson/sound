@@ -75,8 +75,17 @@ public class AudMixer {
 
     /**
      Put copy of audio block into queue so we don't
-     have to worry about caller messing with it afterwards
+     have to worry about caller messing with it afterwards.
+     Scale by factor.
      */
+    public void mix(long when, short[] block, double factor) {
+        short[] tmp = Arrays.copyOf(block, block.length);
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = (short)(tmp[i] * factor);
+        }
+        scheduledBlocks.add(new QBlock(when, tmp));
+    }
+
     public void mix(long when, short[] block) {
         scheduledBlocks.add(new QBlock(when, Arrays.copyOf(block, block.length)));
     }

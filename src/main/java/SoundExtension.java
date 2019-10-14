@@ -314,10 +314,17 @@ public class SoundExtension extends org.nlogo.api.DefaultClassManager {
         // Set to play in next buffer, to avoid skipping
         // first bit of wav.
         pos += AudMixer.BUFFER_SIZE_FRAMES + 10;
-        P.mixer.mix(pos, voc.wav[note]);
+        // p is PCT of vel above/below midpoint of MAX.
+        double p = 10.0 * ( ((2.0 * voc.vel) / P.VELOCITY_MAX) - 1.0);
+        double factor = p > 0.0 ? 1.15 : 1.4;
+        //System.out.println("wav factor " + Math.pow(factor,p));
+        P.mixer.mix(pos, voc.wav[note], Math.pow(factor,p));
 
     }
 
+    /* Play wav associated with drum.  Note that 10 velocities
+       are kept for all drums.
+     */
     static void playDrumWav(Voice voc, int vel)
             throws org.nlogo.api.ExtensionException {
 

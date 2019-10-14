@@ -458,9 +458,9 @@ SLIDER
 527
 loop-end
 loop-end
-15
+1
 64
-31.0
+15.0
 16
 1
 NIL

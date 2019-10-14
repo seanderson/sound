@@ -28,7 +28,7 @@ public class Voice {
     short wav[][]; // wavs to play for each note
     AudioFormat format; // format for all audio wavs
     int dur = 1; // duration of note (in terms of smallest note dur.)
-    int vel = 100; // velocity
+    int vel = 100; // velocity (0 to 127)
     int tonic = 48;
     String type = Scale.PENTATONIC;
     String dir; // wavfile's directory relative to model
@@ -239,6 +239,7 @@ public class Voice {
     } // setDrumWaveform
 
     /*
+       Only for drum wavs.
        Fill wav, except wav[pos], with copies of
        wav[pos].  Rescale orignal to fill loudest position with
        a max sample of MAX_VALUE.  Rescale downward by factor subtracting
