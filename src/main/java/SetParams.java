@@ -40,7 +40,7 @@ public class SetParams implements Command {
             P.setPatchSize(args[1].getIntValue());
             Init.resizeWorld(context);
             Init.initDrawing(context);
-            Init.attachAgents(w);
+            Init.attachAgents(context,w);
             Init.restorePatches(w);
         } else {
             throw new ExtensionException("Error in SetParams ");

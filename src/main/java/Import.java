@@ -58,7 +58,7 @@ public class Import implements Command {
 
 
         Init.restorePatches(w);
-        Init.attachAgents(w);
+        Init.attachAgents(context,w);
 
     }
 

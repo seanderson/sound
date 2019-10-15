@@ -15,6 +15,8 @@ import org.nlogo.agent.World;
 
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import org.nlogo.api.ExtensionException;
@@ -167,13 +169,60 @@ public class Init implements Command {
         }
     }
 
+    /*
+       Import may save absolute path.  Check for existence of path, if it fails
+       modify dir to be final directory in P.drums[i].dir or P.voices.[i].dir.
+     */
+    private static void fixFileLocations(Context context) throws ExtensionException {
+
+
+        for (int i = 0; i < P.NDRUMS; i++) {
+            if (P.drums[i].isMidi()) continue;
+            //System.out.println("drum file " + P.drums[i].dir);
+            File f = new File(P.drums[i].dir);
+            //System.out.println("pathsep " + File.pathSeparator);
+            if (!f.exists() || !f.isDirectory()) {
+                String[] tokens = P.drums[i].dir.split(File.separator+"++");
+                //for (String t: tokens) System.out.println("token " + t);
+                try {
+                    P.drums[i].dir = context.attachCurrentDirectory(tokens[tokens.length - 1]);
+                }
+                catch (MalformedURLException ex) {
+                    throw new ExtensionException(ex.getMessage());
+                }
+
+            }
+
+        }
+        for (int i = 0; i < P.NVOICES; i++) {
+            if (P.voices[i].isMidi()) continue;
+            //System.out.println("file " + P.voices[i].dir);
+            File f = new File(P.voices[i].dir);
+
+            if (!f.exists() || !f.isDirectory()) {
+                String[] tokens = P.voices[i].dir.split(File.separator + "++");
+                //for (String t: tokens) System.out.println("token " + t);
+                try {
+                    P.voices[i].dir = context.attachCurrentDirectory(tokens[tokens.length - 1]);
+                }
+                catch (MalformedURLException ex) {
+                    throw new ExtensionException(ex.getMessage());
+                }
+
+            }
+        }
+
+
+    }
+
     /**
        If agents exist already, probably after an importWorld, just
        attach agents to already created voices.  Reload waves if necessary.
 
      */
-    public static void attachAgents(World w) throws ExtensionException {
+    public static void attachAgents(Context context, World w) throws ExtensionException {
 
+        fixFileLocations(context);
 
         // assign drums
         for (int i = 0; i < P.NDRUMS; i++) {
